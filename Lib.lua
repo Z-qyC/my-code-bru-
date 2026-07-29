@@ -2024,12 +2024,7 @@
                 Tweening = false;
             }
 
-            local Items = Cfg.Items; do
-                -- Button 
-                    Items.Button = Library:Create( "TextButton" , {
-                        Active = false;
-                        BorderColor3 = rgb(0, 0, 0);
-                        Parent = self.Items.WindowButtonHolder;
+                        Parent = Library.Items and Library.Items.WindowButtonHolder or self.Items.WindowButtonHolder;
                         Name = "\0";
                         Selectable = false;
                         Size = dim2(0, 0, 0, 16);
