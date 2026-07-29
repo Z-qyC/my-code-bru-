@@ -5389,7 +5389,7 @@
             return setmetatable(Cfg, Library)
         end 
 
- function Library:AddTab(properties)
+function Library:AddTab(properties)
     local Cfg = {
         Name = properties.Name;
         Items = {};
@@ -5403,322 +5403,316 @@
     } 
 
     local Items = Cfg.Items; do 
-        -- Top Page
-            Items.Outline = Library:Create( "TextButton" , {
-                Parent = self.Items.TabHolder;
-                Name = "\0";
-                Size = dim2(0, 0, 1, 0);
-                BorderColor3 = rgb(0, 0, 0);
-                BorderSizePixel = 0;
-                AutomaticSize = Enum.AutomaticSize.X;
-                BackgroundColor3 = themes.preset.inline
-            });	Library:Themify(Items.Outline, "inline", "BackgroundColor3")
+        Items.Outline = Library:Create( "TextButton" , {
+            Parent = self.Items.TabHolder;
+            Name = "\0";
+            Size = dim2(0, 0, 1, 0);
+            BorderColor3 = rgb(0, 0, 0);
+            BorderSizePixel = 0;
+            AutomaticSize = Enum.AutomaticSize.X;
+            BackgroundColor3 = themes.preset.inline
+        });	Library:Themify(Items.Outline, "inline", "BackgroundColor3")
 
-            Items.Inline = Library:Create( "Frame" , {
-                Parent = Items.Outline;
-                Name = "\0";
-                Position = dim2(0, 1, 0, 1);
-                BorderColor3 = rgb(0, 0, 0);
-                Size = dim2(1, -2, 1, -2);
-                BorderSizePixel = 0;
-                BackgroundColor3 = themes.preset.misc_1
-            }); Library:Themify(Items.Inline, "misc_2", "BackgroundColor3")
-            Library:Themify(Items.Inline, "misc_1", "BackgroundColor3")
+        Items.Inline = Library:Create( "Frame" , {
+            Parent = Items.Outline;
+            Name = "\0";
+            Position = dim2(0, 1, 0, 1);
+            BorderColor3 = rgb(0, 0, 0);
+            Size = dim2(1, -2, 1, -2);
+            BorderSizePixel = 0;
+            BackgroundColor3 = themes.preset.misc_1
+        }); Library:Themify(Items.Inline, "misc_2", "BackgroundColor3")
+        Library:Themify(Items.Inline, "misc_1", "BackgroundColor3")
 
-            Items.Title = Library:Create( "TextLabel" , {
-                FontFace = Fonts[themes.preset.font];
-                Parent = Items.Inline;
-                TextColor3 = themes.preset.unselected;
-                TextStrokeColor3 = rgb(255, 255, 255);
-                Text = Cfg.Name;
-                Name = "\0";
-                AutomaticSize = Enum.AutomaticSize.XY;
-                AnchorPoint = vec2(0, 0.5);
-                BorderSizePixel = 0;
-                BackgroundTransparency = 1;
-                Position = dim2(0, 0, 0.5, 0);
-                BorderColor3 = rgb(0, 0, 0);
-                ZIndex = 2;
-                TextSize = 12;
-                BackgroundColor3 = rgb(255, 255, 255)
-            });
+        Items.Title = Library:Create( "TextLabel" , {
+            FontFace = Fonts[themes.preset.font];
+            Parent = Items.Inline;
+            TextColor3 = themes.preset.unselected;
+            TextStrokeColor3 = rgb(255, 255, 255);
+            Text = Cfg.Name;
+            Name = "\0";
+            AutomaticSize = Enum.AutomaticSize.XY;
+            AnchorPoint = vec2(0, 0.5);
+            BorderSizePixel = 0;
+            BackgroundTransparency = 1;
+            Position = dim2(0, 0, 0.5, 0);
+            BorderColor3 = rgb(0, 0, 0);
+            ZIndex = 2;
+            TextSize = 12;
+            BackgroundColor3 = rgb(255, 255, 255)
+        });
 
-            Library:Create( "UIPadding" , {
-                Parent = Items.Title;
-                PaddingRight = dim(0, 5);
-                PaddingLeft = dim(0, 7)
-            });
+        Library:Create( "UIPadding" , {
+            Parent = Items.Title;
+            PaddingRight = dim(0, 5);
+            PaddingLeft = dim(0, 7)
+        });
 
-            Library:Create( "UIStroke" , {
-                Parent = Items.Title;
-                LineJoinMode = Enum.LineJoinMode.Miter
-            });
-        --
+        Library:Create( "UIStroke" , {
+            Parent = Items.Title;
+            LineJoinMode = Enum.LineJoinMode.Miter
+        });
 
-        -- Middle page
-            Items.Holder = Library:Create( "Frame" , {
-                Parent = Library.Other;
-                Name = "\0";
-                Visible = false;
-                Size = dim2(0, 100, 0, 100);
-                BorderColor3 = rgb(0, 0, 0);
-                BorderSizePixel = 0;
-                BackgroundTransparency = 1;
-                AutomaticSize = Enum.AutomaticSize.Y;
-                BackgroundColor3 = rgb(255, 255, 255)
-            });
+        Items.Holder = Library:Create( "Frame" , {
+            Parent = Library.Other;
+            Name = "\0";
+            Visible = false;
+            Size = dim2(0, 100, 0, 100);
+            BorderColor3 = rgb(0, 0, 0);
+            BorderSizePixel = 0;
+            BackgroundTransparency = 1;
+            AutomaticSize = Enum.AutomaticSize.Y;
+            BackgroundColor3 = rgb(255, 255, 255)
+        });
 
-            Items.CharacterHolder = Library:Create( "Frame" , {
-                Parent = Items.Holder;
-                Name = "\0";
-                Size = dim2(1, 0, 0, 18);
-                BorderColor3 = rgb(0, 0, 0);
-                BorderSizePixel = 0;
-                AutomaticSize = Enum.AutomaticSize.Y;
-                BackgroundColor3 = themes.preset.inline
-            });	Library:Themify(Items.CharacterHolder, "inline", "BackgroundColor3")
+        Items.CharacterHolder = Library:Create( "Frame" , {
+            Parent = Items.Holder;
+            Name = "\0";
+            Size = dim2(1, 0, 0, 18);
+            BorderColor3 = rgb(0, 0, 0);
+            BorderSizePixel = 0;
+            AutomaticSize = Enum.AutomaticSize.Y;
+            BackgroundColor3 = themes.preset.inline
+        });	Library:Themify(Items.CharacterHolder, "inline", "BackgroundColor3")
 
-            Library:Create( "UIPadding" , {
-                PaddingBottom = dim(0, 2);
-                Parent = Items.CharacterHolder
-            });
+        Library:Create( "UIPadding" , {
+            PaddingBottom = dim(0, 2);
+            Parent = Items.CharacterHolder
+        });
 
-            Items.Background = Library:Create( "Frame" , {
-                Parent = Items.CharacterHolder;
-                Size = dim2(1, -2, 1, -2);
-                Name = "\0";
-                Position = dim2(0, 1, 0, 1);
-                BorderColor3 = rgb(0, 0, 0);
-                BorderSizePixel = 0;
-                AutomaticSize = Enum.AutomaticSize.Y;
-                BackgroundColor3 = themes.preset.misc_1
-            });	Library:Themify(Items.Background, "misc_1", "BackgroundColor3")
+        Items.Background = Library:Create( "Frame" , {
+            Parent = Items.CharacterHolder;
+            Size = dim2(1, -2, 1, -2);
+            Name = "\0";
+            Position = dim2(0, 1, 0, 1);
+            BorderColor3 = rgb(0, 0, 0);
+            BorderSizePixel = 0;
+            AutomaticSize = Enum.AutomaticSize.Y;
+            BackgroundColor3 = themes.preset.misc_1
+        });	Library:Themify(Items.Background, "misc_1", "BackgroundColor3")
 
-            Library:Create( "UIPadding" , {
-                Parent = Items.Background
-            });
+        Library:Create( "UIPadding" , {
+            Parent = Items.Background
+        });
 
-            Items.ViewportFrame = Library:Create( "ViewportFrame" , {
-                Parent = Items.Background;
-                BorderColor3 = rgb(0, 0, 0);
-                Size = dim2(0, 200, 0, 200);
-                BorderSizePixel = 0;
-                ClipsDescendants = true;
-                BackgroundColor3 = themes.preset.misc_1
-            });	Library:Themify(Items.ViewportFrame, "misc_1", "BackgroundColor3")
+        Items.ViewportFrame = Library:Create( "ViewportFrame" , {
+            Parent = Items.Background;
+            BorderColor3 = rgb(0, 0, 0);
+            Size = dim2(0, 200, 0, 200);
+            BorderSizePixel = 0;
+            ClipsDescendants = true;
+            BackgroundColor3 = themes.preset.misc_1
+        });	Library:Themify(Items.ViewportFrame, "misc_1", "BackgroundColor3")
 
-            Library:Create( "UIListLayout" , {
-                Parent = Items.Holder;
-                Padding = dim(0, -1);
-                SortOrder = Enum.SortOrder.LayoutOrder;
-                HorizontalFlex = Enum.UIFlexAlignment.Fill
-            });
+        Library:Create( "UIListLayout" , {
+            Parent = Items.Holder;
+            Padding = dim(0, -1);
+            SortOrder = Enum.SortOrder.LayoutOrder;
+            HorizontalFlex = Enum.UIFlexAlignment.Fill
+        });
 
-            Items.ElementSelector = Library:Create( "Frame" , {
-                Parent = Items.Holder;
-                Name = "\0";
-                Size = dim2(1, 0, 0, 18);
-                BorderColor3 = rgb(0, 0, 0);
-                BorderSizePixel = 0;
-                AutomaticSize = Enum.AutomaticSize.Y;
-                BackgroundColor3 = themes.preset.inline
-            });	Library:Themify(Items.ElementSelector, "inline", "BackgroundColor3")
+        Items.ElementSelector = Library:Create( "Frame" , {
+            Parent = Items.Holder;
+            Name = "\0";
+            Size = dim2(1, 0, 0, 18);
+            BorderColor3 = rgb(0, 0, 0);
+            BorderSizePixel = 0;
+            AutomaticSize = Enum.AutomaticSize.Y;
+            BackgroundColor3 = themes.preset.inline
+        });	Library:Themify(Items.ElementSelector, "inline", "BackgroundColor3")
 
-            Items.ElementHolder = Library:Create( "Frame" , {
-                Parent = Items.ElementSelector;
-                Size = dim2(1, -2, 1, -2);
-                Name = "\0";
-                Position = dim2(0, 1, 0, 1);
-                BorderColor3 = rgb(0, 0, 0);
-                BorderSizePixel = 0;
-                AutomaticSize = Enum.AutomaticSize.Y;
-                BackgroundColor3 = themes.preset.misc_1
-            });	Library:Themify(Items.ElementHolder, "misc_1", "BackgroundColor3")
+        Items.ElementHolder = Library:Create( "Frame" , {
+            Parent = Items.ElementSelector;
+            Size = dim2(1, -2, 1, -2);
+            Name = "\0";
+            Position = dim2(0, 1, 0, 1);
+            BorderColor3 = rgb(0, 0, 0);
+            BorderSizePixel = 0;
+            AutomaticSize = Enum.AutomaticSize.Y;
+            BackgroundColor3 = themes.preset.misc_1
+        });	Library:Themify(Items.ElementHolder, "misc_1", "BackgroundColor3")
 
-            Library:Create( "UIPadding" , {
-                PaddingTop = dim(0, 5);
-                PaddingBottom = dim(0, 5);
-                Parent = Items.ElementHolder;
-                PaddingRight = dim(0, 5);
-                PaddingLeft = dim(0, 5)
-            });
+        Library:Create( "UIPadding" , {
+            PaddingTop = dim(0, 5);
+            PaddingBottom = dim(0, 5);
+            Parent = Items.ElementHolder;
+            PaddingRight = dim(0, 5);
+            PaddingLeft = dim(0, 5)
+        });
 
-            Library:Create( "UIGridLayout" , {
-                Parent = Items.ElementHolder;
-                SortOrder = Enum.SortOrder.LayoutOrder;
-                CellSize = dim2(0, 5, 0, 15)
-            });
+        Library:Create( "UIGridLayout" , {
+            Parent = Items.ElementHolder;
+            SortOrder = Enum.SortOrder.LayoutOrder;
+            CellSize = dim2(0, 5, 0, 15)
+        });
 
-            Library:Create( "UIPadding" , {
-                PaddingBottom = dim(0, 2);
-                Parent = Items.ElementSelector
-            });
-        --
+        Library:Create( "UIPadding" , {
+            PaddingBottom = dim(0, 2);
+            Parent = Items.ElementSelector
+        });
 
-        -- Box
-            Items.Box = Library:Create( "Frame" , {
-                BackgroundTransparency = 1;
-                Parent = Items.ViewportFrame;
-                BorderColor3 = rgb(0, 0, 0);
-                Name = "\0";
-                BorderSizePixel = 0;
-                BackgroundColor3 = rgb(255, 255, 255)
-            });
+        Items.Box = Library:Create( "Frame" , {
+            BackgroundTransparency = 1;
+            Parent = Items.ViewportFrame;
+            BorderColor3 = rgb(0, 0, 0);
+            Name = "\0";
+            BorderSizePixel = 0;
+            BackgroundColor3 = rgb(255, 255, 255)
+        });
 
-            Items.Left = Library:Create( "Frame" , {
-                Parent = Items.Box;
-                Size = dim2(0, 100, 1, 0);
-                BackgroundTransparency = 1;
-                Name = "\0";
-                AnchorPoint = vec2(1, 0);
-                Position = dim2(0, -1, 0, 0);
-                BorderColor3 = rgb(0, 0, 0);
-                ZIndex = 2;
-                BorderSizePixel = 0;
-                BackgroundColor3 = rgb(255, 255, 255)
-            });
+        Items.Left = Library:Create( "Frame" , {
+            Parent = Items.Box;
+            Size = dim2(0, 100, 1, 0);
+            BackgroundTransparency = 1;
+            Name = "\0";
+            AnchorPoint = vec2(1, 0);
+            Position = dim2(0, -1, 0, 0);
+            BorderColor3 = rgb(0, 0, 0);
+            ZIndex = 2;
+            BorderSizePixel = 0;
+            BackgroundColor3 = rgb(255, 255, 255)
+        });
 
-            Items.LeftTexts = Library:Create( "Frame" , {
-                Parent = Items.Left;
-                Size = dim2(0, 0, 1, 0);
-                Name = "\0";
-                BackgroundTransparency = 1;
-                Position = dim2(1, 1, 0, 0);
-                BorderColor3 = rgb(0, 0, 0);
-                LayoutOrder = 9999;
-                ZIndex = 2;
-                AutomaticSize = Enum.AutomaticSize.X;
-                BorderSizePixel = 0;
-                BackgroundColor3 = rgb(255, 255, 255)
-            });
+        Items.LeftTexts = Library:Create( "Frame" , {
+            Parent = Items.Left;
+            Size = dim2(0, 0, 1, 0);
+            Name = "\0";
+            BackgroundTransparency = 1;
+            Position = dim2(1, 1, 0, 0);
+            BorderColor3 = rgb(0, 0, 0);
+            LayoutOrder = 9999;
+            ZIndex = 2;
+            AutomaticSize = Enum.AutomaticSize.X;
+            BorderSizePixel = 0;
+            BackgroundColor3 = rgb(255, 255, 255)
+        });
 
-            Library:Create( "UIListLayout" , {
-                FillDirection = Enum.FillDirection.Vertical;
-                Parent = Items.LeftTexts;
-                Padding = dim(0, 1);
-                SortOrder = Enum.SortOrder.LayoutOrder
-            });
+        Library:Create( "UIListLayout" , {
+            FillDirection = Enum.FillDirection.Vertical;
+            Parent = Items.LeftTexts;
+            Padding = dim(0, 1);
+            SortOrder = Enum.SortOrder.LayoutOrder
+        });
 
-            Library:Create( "UIListLayout" , {
-                FillDirection = Enum.FillDirection.Horizontal;
-                HorizontalAlignment = Enum.HorizontalAlignment.Right;
-                VerticalFlex = Enum.UIFlexAlignment.Fill;
-                Parent = Items.Left;
-                Padding = dim(0, 1);
-                SortOrder = Enum.SortOrder.LayoutOrder
-            });
+        Library:Create( "UIListLayout" , {
+            FillDirection = Enum.FillDirection.Horizontal;
+            HorizontalAlignment = Enum.HorizontalAlignment.Right;
+            VerticalFlex = Enum.UIFlexAlignment.Fill;
+            Parent = Items.Left;
+            Padding = dim(0, 1);
+            SortOrder = Enum.SortOrder.LayoutOrder
+        });
 
-            Items.Bottom = Library:Create( "Frame" , {
-                Parent = Items.Box;
-                Size = dim2(1, 0, 0, 100);
-                Name = "\0";
-                BackgroundTransparency = 1;
-                Position = dim2(0, 0, 1, 1);
-                BorderColor3 = rgb(0, 0, 0);
-                AutomaticSize = Enum.AutomaticSize.Y;
-                ZIndex = 2;
-                BorderSizePixel = 0;
-                BackgroundColor3 = rgb(255, 255, 255)
-            });
+        Items.Bottom = Library:Create( "Frame" , {
+            Parent = Items.Box;
+            Size = dim2(1, 0, 0, 100);
+            Name = "\0";
+            BackgroundTransparency = 1;
+            Position = dim2(0, 0, 1, 1);
+            BorderColor3 = rgb(0, 0, 0);
+            AutomaticSize = Enum.AutomaticSize.Y;
+            ZIndex = 2;
+            BorderSizePixel = 0;
+            BackgroundColor3 = rgb(255, 255, 255)
+        });
 
-            Items.BottomTexts = Esp:Create( "Frame", {
-                LayoutOrder = 1;
-                Parent = Items.Bottom;
-                BackgroundTransparency = 1;
-                Name = "\0";
-                BorderColor3 = rgb(0, 0, 0);
-                BorderSizePixel = 0;
-                AutomaticSize = Enum.AutomaticSize.XY;
-                BackgroundColor3 = rgb(255, 255, 255)
-            });
+        Items.BottomTexts = Library:Create( "Frame", {
+            LayoutOrder = 1;
+            Parent = Items.Bottom;
+            BackgroundTransparency = 1;
+            Name = "\0";
+            BorderColor3 = rgb(0, 0, 0);
+            BorderSizePixel = 0;
+            AutomaticSize = Enum.AutomaticSize.XY;
+            BackgroundColor3 = rgb(255, 255, 255)
+        });
 
-            Esp:Create( "UIListLayout", {
-                Parent = Items.BottomTexts;
-                Padding = dim(0, 1);
-                SortOrder = Enum.SortOrder.LayoutOrder
-            });
+        Library:Create( "UIListLayout", {
+            Parent = Items.BottomTexts;
+            Padding = dim(0, 1);
+            SortOrder = Enum.SortOrder.LayoutOrder
+        });
 
-            Library:Create( "UIListLayout" , {
-                SortOrder = Enum.SortOrder.LayoutOrder;
-                HorizontalAlignment = Enum.HorizontalAlignment.Center;
-                HorizontalFlex = Enum.UIFlexAlignment.Fill;
-                Parent = Items.Bottom;
-                Padding = dim(0, 1)
-            });
+        Library:Create( "UIListLayout" , {
+            SortOrder = Enum.SortOrder.LayoutOrder;
+            HorizontalAlignment = Enum.HorizontalAlignment.Center;
+            HorizontalFlex = Enum.UIFlexAlignment.Fill;
+            Parent = Items.Bottom;
+            Padding = dim(0, 1)
+        });
 
-            Items.Top = Library:Create( "Frame" , {
-                Parent = Items.Box;
-                Size = dim2(1, 0, 0, 100);
-                BackgroundTransparency = 1;
-                Name = "\0";
-                AnchorPoint = vec2(0, 1);
-                Position = dim2(0, 0, 0, -1);
-                BorderColor3 = rgb(0, 0, 0);
-                ZIndex = 2;
-                BorderSizePixel = 0;
-                BackgroundColor3 = rgb(255, 255, 255)
-            });
+        Items.Top = Library:Create( "Frame" , {
+            Parent = Items.Box;
+            Size = dim2(1, 0, 0, 100);
+            BackgroundTransparency = 1;
+            Name = "\0";
+            AnchorPoint = vec2(0, 1);
+            Position = dim2(0, 0, 0, -1);
+            BorderColor3 = rgb(0, 0, 0);
+            ZIndex = 2;
+            BorderSizePixel = 0;
+            BackgroundColor3 = rgb(255, 255, 255)
+        });
 
-            Library:Create( "UIListLayout" , {
-                VerticalAlignment = Enum.VerticalAlignment.Bottom;
-                SortOrder = Enum.SortOrder.LayoutOrder;
-                HorizontalAlignment = Enum.HorizontalAlignment.Center;
-                HorizontalFlex = Enum.UIFlexAlignment.Fill;
-                Parent = Items.Top;
-                Padding = dim(0, 1)
-            });
-            
-            Items.TopTexts = Esp:Create( "Frame", {
-                LayoutOrder = -1;
-                Parent = Items.Top;
-                BackgroundTransparency = 1;
-                Name = "\0";
-                BorderColor3 = rgb(0, 0, 0);
-                BorderSizePixel = 0;
-                AutomaticSize = Enum.AutomaticSize.XY;
-                BackgroundColor3 = rgb(255, 255, 255)
-            });
+        Library:Create( "UIListLayout" , {
+            VerticalAlignment = Enum.VerticalAlignment.Bottom;
+            SortOrder = Enum.SortOrder.LayoutOrder;
+            HorizontalAlignment = Enum.HorizontalAlignment.Center;
+            HorizontalFlex = Enum.UIFlexAlignment.Fill;
+            Parent = Items.Top;
+            Padding = dim(0, 1)
+        });
+        
+        Items.TopTexts = Library:Create( "Frame", {
+            LayoutOrder = -1;
+            Parent = Items.Top;
+            BackgroundTransparency = 1;
+            Name = "\0";
+            BorderColor3 = rgb(0, 0, 0);
+            BorderSizePixel = 0;
+            AutomaticSize = Enum.AutomaticSize.XY;
+            BackgroundColor3 = rgb(255, 255, 255)
+        });
 
-            Items.Right = Library:Create( "Frame" , {
-                Parent = Items.Box;
-                Size = dim2(0, 100, 1, 0);
-                Name = "\0";
-                BackgroundTransparency = 1;
-                Position = dim2(1, 1, 0, 0);
-                BorderColor3 = rgb(0, 0, 0);
-                ZIndex = 2;
-                BorderSizePixel = 0;
-                BackgroundColor3 = rgb(255, 255, 255)
-            });
+        Items.Right = Library:Create( "Frame" , {
+            Parent = Items.Box;
+            Size = dim2(0, 100, 1, 0);
+            Name = "\0";
+            BackgroundTransparency = 1;
+            Position = dim2(1, 1, 0, 0);
+            BorderColor3 = rgb(0, 0, 0);
+            ZIndex = 2;
+            BorderSizePixel = 0;
+            BackgroundColor3 = rgb(255, 255, 255)
+        });
 
-            Library:Create( "UIListLayout" , {
-                FillDirection = Enum.FillDirection.Horizontal;
-                VerticalFlex = Enum.UIFlexAlignment.Fill;
-                Parent = Items.Right;
-                Padding = dim(0, 1);
-                SortOrder = Enum.SortOrder.LayoutOrder
-            });
+        Library:Create( "UIListLayout" , {
+            FillDirection = Enum.FillDirection.Horizontal;
+            VerticalFlex = Enum.UIFlexAlignment.Fill;
+            Parent = Items.Right;
+            Padding = dim(0, 1);
+            SortOrder = Enum.SortOrder.LayoutOrder
+        });
 
-            Items.RightTexts = Library:Create( "Frame" , {
-                Parent = Items.Right;
-                Size = dim2(0, 0, 1, 0);
-                Name = "\0";
-                BackgroundTransparency = 1;
-                Position = dim2(0, 0, 0, 0);
-                BorderColor3 = rgb(0, 0, 0);
-                LayoutOrder = 9999;
-                ZIndex = 2;
-                AutomaticSize = Enum.AutomaticSize.X;
-                BorderSizePixel = 0;
-                BackgroundColor3 = rgb(255, 255, 255)
-            });
+        Items.RightTexts = Library:Create( "Frame" , {
+            Parent = Items.Right;
+            Size = dim2(0, 0, 1, 0);
+            Name = "\0";
+            BackgroundTransparency = 1;
+            Position = dim2(0, 0, 0, 0);
+            BorderColor3 = rgb(0, 0, 0);
+            LayoutOrder = 9999;
+            ZIndex = 2;
+            AutomaticSize = Enum.AutomaticSize.X;
+            BorderSizePixel = 0;
+            BackgroundColor3 = rgb(255, 255, 255)
+        });
 
-            Library:Create( "UIListLayout" , {
-                Parent = Items.RightTexts;
-                Padding = dim(0, 1);
-                SortOrder = Enum.SortOrder.LayoutOrder
-            });
-        --
+        Library:Create( "UIListLayout" , {
+            Parent = Items.RightTexts;
+            Padding = dim(0, 1);
+            SortOrder = Enum.SortOrder.LayoutOrder
+        });
 
         Items.Camera = Library:Create( "Camera" , {
             CameraType = Enum.CameraType.Track;
