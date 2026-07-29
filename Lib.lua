@@ -4846,6 +4846,163 @@
                     setclipboard('game:GetService("TeleportService"):TeleportToPlaceInstance(' .. game.PlaceId .. ', "' .. game.JobId .. '", game.Players.LocalPlayer)')
                 end})
                 Section:Button({Name = "Rejoin", Callback = function()
+                    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
+                end})
+                Section:Button({Name = "Join New Server", Callback = function()
+                    local apiRequest = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100"))
+                    local data = apiRequest.data[math.random(1, #apiRequest.data)]
+
+                    if data.playing <= Flags["MaxPlayers"] then 
+                        game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, data.id)
+                    end 
+                end})
+                Section:Slider({Name = "Max Players", Min = 0, Max = 40, Default = 10, Decimal = 1, Flag = "MaxPlayers"})
+            -- 
+
+            -- Theming 
+                local Column = Tab:Column({})
+                local Section = Column:Section({Name = "Other"})
+                Section:Label({Name = "Inline"}):Colorpicker({Color = themes.preset.inline, Callback = function(color, alpha)
+                    Library:RefreshTheme("inline", color)
+                end})
+                Section:Label({Name = "Outline"}):Colorpicker({Color = themes.preset.outline, Callback = function(color, alpha)
+                    Library:RefreshTheme("outline", color)
+                end})
+                Section:Label({Name = "Accent"}):Colorpicker({Color = themes.preset.accent, Callback = function(color, alpha)
+                    Library:RefreshTheme("accent", color)
+                end})
+                local Label = Section:Label({Name = "Background"})
+                Label:Colorpicker({Color = themes.preset.background, Callback = function(color, alpha)
+                    Library:RefreshTheme("background", color)
+                end})
+                Label:Colorpicker({Color = themes.preset.misc_1, Callback = function(color, alpha)
+                    Library:RefreshTheme("misc_1", color)
+                end})
+                Section:Label({Name = "Text Color"}):Colorpicker({Color = themes.preset.text_color, Callback = function(color, alpha)
+                    Library:RefreshTheme("text_color", color)
+                end})
+                Section:Label({Name = "Tooltip"}):Colorpicker({Color = themes.preset.tooltip, Callback = function(color, alpha)
+                    Library:RefreshTheme("tooltip", color)
+                end})
+                Section:Label({Name = "Unselected"}):Colorpicker({Color = themes.preset.unselected, Callback = function(color, alpha)
+                    Library:RefreshTheme("unselected", color)
+                end})
+                local Label = Section:Label({Name = "Element Gradients"})
+                Label:Colorpicker({Color = themes.preset.misc_1, Callback = function(color, alpha)
+                    Library:RefreshTheme("misc_1", color)
+
+                    for _,seq in themes.gradients.elements do
+                        seq.Color = rgbseq{rgbkey(0, themes.preset.misc_1), rgbkey(1, themes.preset.misc_2)}
+                    end
+                end, Flag = "Element Gradient 1"})
+                Label:Colorpicker({Color = themes.preset.misc_2, Callback = function(color, alpha)
+                    themes.preset.misc_2 = color 
+
+                    for _,seq in themes.gradients.elements do
+                        seq.Color = rgbseq{rgbkey(0, themes.preset.misc_1), rgbkey(1, themes.preset.misc_2)}
+                    end
+                end, Flag = "Element Gradient 2"})
+                Section:Slider({Name = "Tween Speed", Min = 0, Max = 3, Decimal = Library.DraggingSpeed, Default = .3, Callback = function(num)
+                    Library.TweeningSpeed = num
+                end})
+                Section:Dropdown({Name = "Tweening Style", Options = {"Linear", "Sine", "Back", "Quad", "Quart", "Quint", "Bounce", "Elastic", "Exponential", "Circular", "Cubic"}, Flag = "LibraryEasingStyle", Default = "Quint", Callback = function(Option)
+                    Library.EasingStyle = Enum.EasingStyle[Option]
+                end});
+                Section:Slider({Name = "Dragging Speed", Min = 0, Max = 1, Decimal = .01, Default = .05, Callback = function(num)
+                    Library.DraggingSpeed = num
+                end})
+                Section:Label({Name = "Menu Bind"}):Keybind({Name = "Menu Bind", Key = Enum.KeyCode.E, Callback = function(bool) 
+                    Window.SetVisible(bool) 
+                end})
+                Window.Tweening = false
+                Section:Toggle({Name = "Toggle Watermark", Callback = function(bool)
+                    Window.SetWatermarkVisible(bool)
+                end})
+                Section:Toggle({Name = "Toggle Keybind List", Callback = function(bool)
+                    Library.KeybindList.Items.Holder.Visible = bool 
+                    Library.KeybindList.Items.List.Visible = bool 
+                end})
+                Section:Textbox({Name = "Custom Menu Name", Default = Window.Name, Callback = function(text)
+                    Window.Name = text
+                end})
+                Section:Dropdown({Name = "Font", Options = FontIndexes, Callback = function(option)
+                    for _,text in themes.utility.text_color.TextColor3 do 
+                        text.FontFace = Fonts[option]
+                    end 
+                end, Default = "ProggyClean", Flag = "Menu Font"})
+                Section:Slider({Name = "TextSize", Default = 12, Decimal = 1, Min = 1, Max = 30, Callback = function(int)
+                    for _,text in themes.utility.text_color.TextColor3 do 
+                        text.TextSize = int
+                    end 
+
+                    themes.preset.textsize = int
+                end})
+                Section:Slider({Name = "Blur Intensity", Default = 14, Decimal = 1, Min = 1, Max = 100, Flag = "BlurSize", Callback = function(int)
+                    if Window.Items.Holder.Visible then 
+                        Library.Blur.Size = int
+                    end 
+                end})
+                Section:Button({Name = "Test", Callback = function()
+                    local Notification = Library:Notification({Name = "Hello there!", Lifetime = 5})
+                    Notification:NotificationButton({Name = "Discard", Callback = function()
+                        Notification.DestroyNotif()
+                    end})
+                    Notification:NotificationButton({Name = "Make another", Callback = function()
+                    end})
+                end})
+            -- 
+        end
+            -- Settings
+                local ConfigText;
+                local Column = Tab:Column({})
+                local Section = Column:Section({Name = "Main"})
+                ConfigHolder = Section:List({
+                    Name = "Configs", 
+                    Flag = "config_Name_list", 
+                    Size = 100;
+                    Callback = function(option) 
+                        if Text and option then 
+                            Text.Set(option) 
+                        end 
+                    end, 
+                }); 
+                Library:UpdateConfigList();
+
+                Text = Section:Textbox({Name = "Config Name:", Flag = "config_Name_text", Callback = function(text)
+                    ConfigText = text
+                end})
+
+                Section:Button({Name = "Save", Callback = function() 
+                    writefile(Library.Directory .. "/configs/" .. ConfigText .. ".cfg", Library:GetConfig())
+                    Library:Notification({Name = "Saved config.", Lifetime = 5})
+                    Library:UpdateConfigList()
+                end})
+
+                Section:Button({Name = "Load", Callback = function() 
+                    Window.Tweening = true 
+                    Library:LoadConfig(readfile(Library.Directory .. "/configs/" .. ConfigText .. ".cfg"))  
+                    Library:Notification({Name = "Loaded config.", Lifetime = 5})
+                    Library:UpdateConfigList() 
+                    Window.Tweening = false 
+                end})
+
+                Section:Button({Name = "Delete", Callback = function() 
+                    delfile(Library.Directory .. "/configs/" .. ConfigText .. ".cfg")  
+                    Library:Notification({Name = "Deleted config.", Lifetime = 5})
+                    Library:UpdateConfigList() 
+                end})
+
+                local Section = Column:Section({Name = "Server"})
+                Section:Button({Name = "Copy JobId", Callback = function()
+                    setclipboard(game.JobId)
+                end})
+                Section:Button({Name = "Copy GameID", Callback = function()
+                    setclipboard(game.GameId)
+                end})
+                Section:Button({Name = "Copy Join Script", Callback = function()
+                    setclipboard('game:GetService("TeleportService"):TeleportToPlaceInstance(' .. game.PlaceId .. ', "' .. game.JobId .. '", game.Players.LocalPlayer)')
+                end})
+                Section:Button({Name = "Rejoin", Callback = function()
                     game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, lp)
                 end})
                 Section:Button({Name = "Join New Server", Callback = function()
@@ -5317,216 +5474,169 @@
 
         local Options = setmetatable({}, {__index = MiscOptions, __newindex = function(self, key, value) MiscOptions[key] = value Esp.RefreshElements(key, value) end});
 
-                function Library:HitpartPicker(properties)
+        function Library:HitpartPicker(properties)
             local Cfg = {
                 Items = {};
-                CurrentTab;
                 Section = self;
                 R6Selected = {};
                 R15Selected = {};
                 R6MultiMode = true;
                 R15MultiMode = true;
                 HighlightColor = rgb(0, 150, 255);
+                Tweening = false;
+                Open = false;
             } 
 
             local Items = Cfg.Items; do 
+                -- Holder Tab button
                 Items.PickerHolder = Library:Create( "TextButton" , {
                     Parent = self.Items.Elements;
                     Name = "\0";
-                    Size = dim2(1, 0, 0, 0);
-                    BorderColor3 = rgb(0, 0, 0);
-                    BorderSizePixel = 0;
-                    AutomaticSize = Enum.AutomaticSize.Y;
-                    BackgroundColor3 = themes.preset.outline
-                });	Library:Themify(Items.PickerHolder, "outline", "BackgroundColor3")
-
-                Library:Create( "UIPadding" , {
-                    PaddingTop = dim(0, 1);
-                    PaddingBottom = dim(0, 1);
-                    Parent = Items.PickerHolder;
-                    PaddingRight = dim(0, 1);
-                    PaddingLeft = dim(0, 1)
-                });
-
-                Library:Create( "UIListLayout" , {
-                    Parent = Items.PickerHolder;
-                    Padding = dim(0, -1);
-                    SortOrder = Enum.SortOrder.LayoutOrder;
-                    HorizontalFlex = Enum.UIFlexAlignment.Fill
-                });
-
-                Items.Outline = Library:Create( "Frame" , {
-                    LayoutOrder = -1;
-                    Name = "\0";
-                    Parent = Items.PickerHolder;
-                    BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, 0, 0, 18);
+                    BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
                     BackgroundColor3 = themes.preset.inline
-                });	Library:Themify(Items.Outline, "inline", "BackgroundColor3")
+                });	Library:Themify(Items.PickerHolder, "inline", "BackgroundColor3")
 
-                Items.TabHolder = Library:Create( "Frame" , {
-                    Parent = Items.Outline;
+                Items.Title = Library:Create( "TextLabel" , {
+                    FontFace = Fonts[themes.preset.font];
+                    Parent = Items.PickerHolder;
+                    TextColor3 = themes.preset.unselected;
+                    Text = "Hitpart Picker";
                     Name = "\0";
-                    Position = dim2(0, 1, 0, 1);
-                    BorderColor3 = rgb(0, 0, 0);
-                    Size = dim2(1, -2, 1, -2);
-                    BorderSizePixel = 0;
-                    BackgroundColor3 = themes.preset.misc_1
-                });	Library:Themify(Items.TabHolder, "misc_1", "BackgroundColor3")
+                    AutomaticSize = Enum.AutomaticSize.XY;
+                    AnchorPoint = vec2(0.5, 0.5);
+                    Position = dim2(0.5, 0, 0.5, 0);
+                    BackgroundTransparency = 1;
+                    TextSize = 12;
+                }); Library:Themify(Items.Title, "unselected", "TextColor3")
 
-                Library:Create( "UIListLayout" , {
-                    Parent = Items.TabHolder;
-                    Padding = dim(0, -1);
-                    SortOrder = Enum.SortOrder.LayoutOrder;
-                    FillDirection = Enum.FillDirection.Horizontal
-                });
-
-                Library:Create( "UIPadding" , {
-                    PaddingTop = dim(0, -1);
-                    PaddingBottom = dim(0, -1);
-                    Parent = Items.TabHolder;
-                    PaddingRight = dim(0, -1);
-                    PaddingLeft = dim(0, -1)
-                });
-
+                -- Pop-out Window
                 Items.PickerFrame = Library:Create( "Frame" , {
                     Parent = Library.Other;
                     Name = "\0";
                     Visible = false;
                     Size = dim2(0, 520, 0, 420);
+                    Position = dim2(0, 300, 0, 300);
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
+                    BackgroundColor3 = themes.preset.outline
+                }); Library:Themify(Items.PickerFrame, "outline", "BackgroundColor3")
+
+                Items.Inline = Library:Create( "Frame" , {
+                    Parent = Items.PickerFrame;
+                    Name = "\0";
+                    Position = dim2(0, 1, 0, 1);
+                    Size = dim2(1, -2, 1, -2);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = themes.preset.inline
+                }); Library:Themify(Items.Inline, "inline", "BackgroundColor3")
+
+                Items.Background = Library:Create( "Frame" , {
+                    Parent = Items.Inline;
+                    Name = "\0";
+                    Position = dim2(0, 1, 0, 1);
+                    Size = dim2(1, -2, 1, -2);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = themes.preset.background
+                }); Library:Themify(Items.Background, "background", "BackgroundColor3")
+
+                Items.TitleBar = Library:Create( "Frame" , {
+                    Parent = Items.Background;
+                    Name = "\0";
+                    Size = dim2(1, 0, 0, 32);
+                    BackgroundColor3 = rgb(40, 40, 40);
+                    BorderSizePixel = 0;
+                });
+
+                Items.TitleLabel = Library:Create( "TextLabel" , {
+                    Parent = Items.TitleBar;
+                    FontFace = Fonts[themes.preset.font];
+                    TextColor3 = themes.preset.text_color;
+                    Text = "Multi-Hitpart Picker (R6 + R15)";
+                    Name = "\0";
+                    Size = dim2(1, -70, 1, 0);
+                    Position = dim2(0, 10, 0, 0);
                     BackgroundTransparency = 1;
-                    BackgroundColor3 = rgb(255, 255, 255)
+                    TextXAlignment = Enum.TextXAlignment.Left;
+                    TextSize = 14;
+                });
+
+                Items.CloseBtn = Library:Create( "TextButton" , {
+                    Parent = Items.TitleBar;
+                    Name = "\0";
+                    Size = dim2(0, 50, 0, 28);
+                    Position = dim2(1, -55, 0.5, -14);
+                    BackgroundColor3 = rgb(180, 50, 50);
+                    TextColor3 = rgb(255, 255, 255);
+                    Text = "X";
+                    TextSize = 14;
+                    BorderSizePixel = 0;
+                })
+                Items.CloseBtn.MouseButton1Click:Connect(function()
+                    Cfg.SetVisible(false)
+                end)
+
+                Items.PickerContainer = Library:Create( "Frame" , {
+                    Parent = Items.Background;
+                    Name = "\0";
+                    Size = dim2(1, -20, 1, -50);
+                    Position = dim2(0, 10, 0, 40);
+                    BackgroundTransparency = 1
                 });
 
                 Library:Draggify(Items.PickerFrame)
                 Library:Resizify(Items.PickerFrame)
             end    
 
-            function Cfg.CreateR6Part(name, size, pos)
-                local btn = Library:Create("TextButton", {
-                    Parent = Items.R6Canvas;
-                    Size = size;
-                    Position = pos;
-                    BackgroundColor3 = rgb(60, 60, 60);
-                    BorderSizePixel = 1;
-                    BorderColor3 = rgb(80, 80, 80);
-                    Text = "";
-                    AutoButtonColor = false;
-                })
-                btn.MouseButton1Click:Connect(function()
-                    if Cfg.R6Selected[name] then
-                        Cfg.R6Selected[name] = nil
-                        btn.BackgroundColor3 = rgb(60, 60, 60)
-                    else
-                        Cfg.R6Selected[name] = true
-                        btn.BackgroundColor3 = Cfg.HighlightColor
-                    end
-                end)
-                return btn
-            end
+            -- R6/R15 Canvas Frames
+            Items.R6Canvas = Library:Create( "Frame" , {
+                Parent = Library.Other;
+                Name = "\0";
+                Size = dim2(0, 220, 0, 300);
+                BackgroundColor3 = rgb(22, 22, 22);
+                BorderSizePixel = 1;
+                BorderColor3 = rgb(50, 50, 50);
+                Visible = false;
+            });
 
-            function Cfg.CreateR15Part(name, size, pos)
-                local btn = Library:Create("TextButton", {
-                    Parent = Items.R15Canvas;
-                    Size = size;
-                    Position = pos;
-                    BackgroundColor3 = rgb(60, 60, 60);
-                    BorderSizePixel = 1;
-                    BorderColor3 = rgb(80, 80, 80);
-                    Text = "";
-                    AutoButtonColor = false;
-                })
-                btn.MouseButton1Click:Connect(function()
-                    if Cfg.R15Selected[name] then
-                        Cfg.R15Selected[name] = nil
-                        btn.BackgroundColor3 = rgb(60, 60, 60)
-                    else
-                        Cfg.R15Selected[name] = true
-                        btn.BackgroundColor3 = Cfg.HighlightColor
-                    end
-                end)
-                return btn
-            end
-
-            function Cfg.GetR6()
-                local list = {}
-                for k, _ in pairs(Cfg.R6Selected) do table.insert(list, k) end
-                return list
-            end
-
-            function Cfg.GetR15()
-                local list = {}
-                for k, _ in pairs(Cfg.R15Selected) do table.insert(list, k) end
-                return list
-            end
-
-            function Cfg.ClearR6()
-                for _, btn in pairs(Items.R6Parts) do
-                    Cfg.R6Selected[_] = nil
-                    btn.BackgroundColor3 = (_ == "HumanoidRootPart") and rgb(40, 40, 40) or rgb(60, 60, 60)
-                end
-            end
-
-            function Cfg.ClearR15()
-                for _, btn in pairs(Items.R15Parts) do
-                    Cfg.R15Selected[_] = nil
-                    btn.BackgroundColor3 = (_ == "HumanoidRootPart") and rgb(40, 40, 40) or rgb(60, 60, 60)
-                end
-            end
+            Items.R15Canvas = Library:Create( "Frame" , {
+                Parent = Library.Other;
+                Name = "\0";
+                Size = dim2(0, 240, 0, 300);
+                BackgroundColor3 = rgb(22, 22, 22);
+                BorderSizePixel = 1;
+                BorderColor3 = rgb(50, 50, 50);
+                Visible = false;
+            });
 
             function Cfg.SetVisible(bool)
-                if Cfg.Tweening then
-                    return 
-                end 
-
-                Items.PickerFrame.Position = dim2(0, Items.PickerHolder.AbsolutePosition.X + 2, 0, Items.PickerHolder.AbsolutePosition.Y + 74)
+                if Cfg.Tweening then return end 
+                Items.PickerFrame.Position = dim2(0, Items.PickerHolder.AbsolutePosition.X + 2, 0, Items.PickerHolder.AbsolutePosition.Y + 24)
                 Cfg.Tween(bool)
             end
 
             function Cfg.Tween(bool) 
-                if Cfg.Tweening then 
-                    return 
-                end 
-
+                if Cfg.Tweening then return end 
                 Cfg.Tweening = true 
 
-                if bool then 
-                    Items.PickerFrame.Visible = true
-                end
+                if bool then Items.PickerFrame.Visible = true end
 
                 local Children = Items.PickerFrame:GetDescendants()
                 table.insert(Children, Items.PickerFrame)
-
                 local Tween;
                 for _,obj in Children do
                     local Index = Library:GetTransparency(obj)
-
-                    if not Index then 
-                        continue 
-                    end
-
+                    if not Index then continue end
                     if type(Index) == "table" then
-                        for _,prop in Index do
-                            Tween = Library:Fade(obj, prop, bool, Library.TweeningSpeed)
-                        end
-                    else
-                        Tween = Library:Fade(obj, Index, bool, Library.TweeningSpeed)
-                    end
+                        for _,prop in Index do Tween = Library:Fade(obj, prop, bool, Library.TweeningSpeed) end
+                    else Tween = Library:Fade(obj, Index, bool, Library.TweeningSpeed) end
                 end
-
-                Library:Connection(Tween.Completed, function()
-                    Cfg.Tweening = false
-                    Items.PickerFrame.Visible = bool
-                end)
+                Library:Connection(Tween.Completed, function() Cfg.Tweening = false; Items.PickerFrame.Visible = bool end)
             end
 
             return setmetatable(Cfg, Library)
         end 
-
-        function Library:EspPreview(properties)
             local Cfg = {
                 Items = {};
                 CurrentTab;
@@ -5598,7 +5708,7 @@
             return setmetatable(Cfg, Library)
         end 
 
-                function Library:AddHitpartTab(properties)
+        function Library:AddHitpartTab(properties)
             local Cfg = {
                 Name = properties.Name;
                 Items = {};
@@ -5606,288 +5716,135 @@
             } 
 
             local Items = Cfg.Items; do 
+                -- Tab button
                 Items.Outline = Library:Create( "TextButton" , {
-                    Parent = self.Items.TabHolder;
+                    Parent = self.Items.PickerContainer; -- Put inside the main picker, NOT its own holder
                     Name = "\0";
-                    Size = dim2(0, 0, 1, 0);
+                    Size = dim2(0, 50, 0, 18);
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
-                    AutomaticSize = Enum.AutomaticSize.X;
                     BackgroundColor3 = themes.preset.inline
                 });	Library:Themify(Items.Outline, "inline", "BackgroundColor3")
 
-                Items.Inline = Library:Create( "Frame" , {
-                    Parent = Items.Outline;
-                    Name = "\0";
-                    Position = dim2(0, 1, 0, 1);
-                    BorderColor3 = rgb(0, 0, 0);
-                    Size = dim2(1, -2, 1, -2);
-                    BorderSizePixel = 0;
-                    BackgroundColor3 = themes.preset.misc_1
-                }); Library:Themify(Items.Inline, "misc_2", "BackgroundColor3")
-                Library:Themify(Items.Inline, "misc_1", "BackgroundColor3")
-
                 Items.Title = Library:Create( "TextLabel" , {
                     FontFace = Fonts[themes.preset.font];
-                    Parent = Items.Inline;
+                    Parent = Items.Outline;
                     TextColor3 = themes.preset.unselected;
-                    TextStrokeColor3 = rgb(255, 255, 255);
                     Text = Cfg.Name;
                     Name = "\0";
                     AutomaticSize = Enum.AutomaticSize.XY;
-                    AnchorPoint = vec2(0, 0.5);
-                    BorderSizePixel = 0;
+                    AnchorPoint = vec2(0.5, 0.5);
+                    Position = dim2(0.5, 0, 0.5, 0);
                     BackgroundTransparency = 1;
-                    Position = dim2(0, 0, 0.5, 0);
-                    BorderColor3 = rgb(0, 0, 0);
-                    ZIndex = 2;
                     TextSize = 12;
-                    BackgroundColor3 = rgb(255, 255, 255)
-                });
+                }); Library:Themify(Items.Title, "unselected", "TextColor3")
 
-                Library:Create( "UIPadding" , {
-                    Parent = Items.Title;
-                    PaddingRight = dim(0, 5);
-                    PaddingLeft = dim(0, 7)
-                });
-
-                Library:Create( "UIStroke" , {
-                    Parent = Items.Title;
-                    LineJoinMode = Enum.LineJoinMode.Miter
-                });
-
+                -- The content holder for this tab
                 Items.Holder = Library:Create( "Frame" , {
-                    Parent = Library.Other;
+                    Parent = self.Items.PickerContainer;
                     Name = "\0";
                     Visible = false;
-                    Size = dim2(0, 100, 0, 100);
-                    BorderColor3 = rgb(0, 0, 0);
-                    BorderSizePixel = 0;
+                    Size = dim2(1, 0, 1, -30);
+                    Position = dim2(0, 0, 0, 25);
                     BackgroundTransparency = 1;
-                    AutomaticSize = Enum.AutomaticSize.Y;
                     BackgroundColor3 = rgb(255, 255, 255)
                 });
 
-                Items.Container = Library:Create( "Frame" , {
+                -- Canvas inside holder
+                Items.Canvas = Library:Create( "Frame" , {
                     Parent = Items.Holder;
                     Name = "\0";
-                    Size = dim2(1, 0, 0, 350);
-                    BorderColor3 = rgb(0, 0, 0);
-                    BorderSizePixel = 0;
-                    BackgroundColor3 = themes.preset.outline
-                }); Library:Themify(Items.Container, "outline", "BackgroundColor3")
-
-                Items.TitleBar = Library:Create( "Frame" , {
-                    Parent = Items.Container;
-                    Name = "\0";
-                    Size = dim2(1, 0, 0, 32);
-                    BorderColor3 = rgb(0, 0, 0);
-                    BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(40, 40, 40)
+                    Size = dim2(0, 220, 0, 280);
+                    Position = dim2(0.5, -110, 0, 10);
+                    BackgroundColor3 = rgb(22, 22, 22);
+                    BorderSizePixel = 1;
+                    BorderColor3 = rgb(50, 50, 50)
                 });
 
-                Items.TitleLabel = Library:Create( "TextLabel" , {
-                    Parent = Items.TitleBar;
-                    FontFace = Fonts[themes.preset.font];
-                    TextColor3 = themes.preset.text_color;
-                    Text = "Multi-Hitpart Picker (R6 + R15)";
+                -- Multi Toggle Button
+                Items.MultiToggle = Library:Create("TextButton", {
+                    Parent = Items.Holder;
                     Name = "\0";
-                    Size = dim2(1, -70, 1, 0);
-                    Position = dim2(0, 10, 0, 0);
-                    BackgroundTransparency = 1;
-                    TextXAlignment = Enum.TextXAlignment.Left;
-                    TextSize = 14;
-                }); Library:Themify(Items.TitleLabel, "text_color", "TextColor3")
-
-                Items.CloseBtn = Library:Create( "TextButton" , {
-                    Parent = Items.TitleBar;
-                    Name = "\0";
-                    Size = dim2(0, 50, 0, 28);
-                    Position = dim2(1, -55, 0.5, -14);
-                    BackgroundColor3 = rgb(180, 50, 50);
+                    Size = dim2(0, 80, 0, 22);
+                    Position = dim2(0.5, -40, 1, -30);
+                    BackgroundColor3 = rgb(50, 50, 50);
                     TextColor3 = rgb(255, 255, 255);
-                    Text = "X";
-                    TextSize = 14;
-                    BorderSizePixel = 0;
+                    Text = "Multi: ON";
+                    TextSize = 11;
+                    BorderSizePixel = 1;
+                    BorderColor3 = rgb(70, 70, 70);
                 })
-                Items.CloseBtn.MouseButton1Click:Connect(function()
-                    self.SetVisible(false)
-                end)
-
-                Items.PickerContainer = Library:Create( "Frame" , {
-                    Parent = Items.Container;
-                    Name = "\0";
-                    Size = dim2(1, -20, 1, -50);
-                    Position = dim2(0, 10, 0, 40);
-                    BackgroundTransparency = 1
-                });
-
-                if Cfg.Name == "R6" then
-                    Items.Canvas = Library:Create( "Frame" , {
-                        Parent = Items.PickerContainer;
-                        Name = "\0";
-                        Size = dim2(0, 220, 0, 300);
-                        Position = dim2(0.5, -110, 0, 25);
-                        BackgroundColor3 = rgb(22, 22, 22);
-                        BorderSizePixel = 1;
-                        BorderColor3 = rgb(50, 50, 50)
-                    });
-
-                    Items.R6Parts = {}
-                    local function createR6Part(name, size, pos)
-                        local btn = self.CreateR6Part(name, size, pos)
-                        Items.R6Parts[name] = btn
-                        return btn
-                    end
-
-                    createR6Part("Head", dim2(0, 50, 0, 44), dim2(0.5, -25, 0, 10))
-                    createR6Part("Torso", dim2(0, 84, 0, 90), dim2(0.5, -42, 0, 56))
-                    createR6Part("LeftArm", dim2(0, 40, 0, 90), dim2(0.5, -86, 0, 56))
-                    createR6Part("RightArm", dim2(0, 40, 0, 90), dim2(0.5, 46, 0, 56))
-                    createR6Part("LeftLeg", dim2(0, 40, 0, 90), dim2(0.5, -42, 0, 148))
-                    createR6Part("RightLeg", dim2(0, 40, 0, 90), dim2(0.5, 2, 0, 148))
-
-                    local R6HRPOut = Library:Create("TextButton", {
-                        Parent = Items.Canvas;
-                        Size = dim2(0, 20, 0, 20);
-                        Position = dim2(0.5, -10, 0, 90);
-                        BackgroundColor3 = rgb(40, 40, 40);
-                        BorderColor3 = rgb(60, 60, 60);
-                        BorderSizePixel = 1;
-                        Text = "";
-                        AutoButtonColor = false;
-                    })
-                    Items.R6Parts.HumanoidRootPart = R6HRPOut
-                    R6HRPOut.MouseButton1Click:Connect(function()
-                        if self.R6Selected.HumanoidRootPart then
-                            self.R6Selected.HumanoidRootPart = nil
-                            R6HRPOut.BackgroundColor3 = rgb(40, 40, 40)
-                        else
-                            self.R6Selected.HumanoidRootPart = true
-                            R6HRPOut.BackgroundColor3 = self.HighlightColor
-                        end
-                    end)
-
-                    local R6MultiToggle = Library:Create("TextButton", {
-                        Parent = Items.PickerContainer;
-                        Name = "\0";
-                        Size = dim2(0, 80, 0, 22);
-                        Position = dim2(0.5, -40, 1, -30);
-                        BackgroundColor3 = rgb(50, 50, 50);
-                        TextColor3 = rgb(255, 255, 255);
-                        Text = "Multi: ON";
-                        TextSize = 11;
-                        BorderSizePixel = 1;
-                        BorderColor3 = rgb(70, 70, 70);
-                    })
-                    R6MultiToggle.MouseButton1Click:Connect(function()
-                        self.R6MultiMode = not self.R6MultiMode
-                        R6MultiToggle.Text = self.R6MultiMode and "Multi: ON" or "Multi: OFF"
-                        for name, btn in pairs(Items.R6Parts) do
-                            self.R6Selected[name] = nil
-                            btn.BackgroundColor3 = (name == "HumanoidRootPart") and rgb(40, 40, 40) or rgb(60, 60, 60)
-                        end
-                    end)
-
-                elseif Cfg.Name == "R15" then
-                    Items.Canvas = Library:Create( "Frame" , {
-                        Parent = Items.PickerContainer;
-                        Name = "\0";
-                        Size = dim2(0, 240, 0, 300);
-                        Position = dim2(0.5, -120, 0, 25);
-                        BackgroundColor3 = rgb(22, 22, 22);
-                        BorderSizePixel = 1;
-                        BorderColor3 = rgb(50, 50, 50)
-                    });
-
-                    Items.R15Parts = {}
-                    local function createR15Part(name, size, pos)
-                        local btn = self.CreateR15Part(name, size, pos)
-                        Items.R15Parts[name] = btn
-                        return btn
-                    end
-
-                    createR15Part("Head", dim2(0, 50, 0, 44), dim2(0.5, -25, 0, 8))
-                    createR15Part("UpperTorso", dim2(0, 84, 0, 76), dim2(0.5, -42, 0, 56))
-                    createR15Part("LowerTorso", dim2(0, 84, 0, 10), dim2(0.5, -42, 0, 136))
-                    createR15Part("LeftUpperArm", dim2(0, 40, 0, 34), dim2(0.5, -86, 0, 56))
-                    createR15Part("RightUpperArm", dim2(0, 40, 0, 34), dim2(0.5, 46, 0, 56))
-                    createR15Part("LeftLowerArm", dim2(0, 40, 0, 42), dim2(0.5, -86, 0, 94))
-                    createR15Part("RightLowerArm", dim2(0, 40, 0, 42), dim2(0.5, 46, 0, 94))
-                    createR15Part("LeftHand", dim2(0, 40, 0, 6), dim2(0.5, -86, 0, 140))
-                    createR15Part("RightHand", dim2(0, 40, 0, 6), dim2(0.5, 46, 0, 140))
-                    createR15Part("LeftUpperLeg", dim2(0, 40, 0, 34), dim2(0.5, -42, 0, 150))
-                    createR15Part("RightUpperLeg", dim2(0, 40, 0, 34), dim2(0.5, 2, 0, 150))
-                    createR15Part("LeftLowerLeg", dim2(0, 40, 0, 42), dim2(0.5, -42, 0, 188))
-                    createR15Part("RightLowerLeg", dim2(0, 40, 0, 42), dim2(0.5, 2, 0, 188))
-                    createR15Part("LeftFoot", dim2(0, 40, 0, 6), dim2(0.5, -42, 0, 234))
-                    createR15Part("RightFoot", dim2(0, 40, 0, 6), dim2(0.5, 2, 0, 234))
-
-                    local R15HRPOut = Library:Create("TextButton", {
-                        Parent = Items.Canvas;
-                        Size = dim2(0, 20, 0, 20);
-                        Position = dim2(0.5, -10, 0, 88);
-                        BackgroundColor3 = rgb(40, 40, 40);
-                        BorderColor3 = rgb(60, 60, 60);
-                        BorderSizePixel = 1;
-                        Text = "";
-                        AutoButtonColor = false;
-                    })
-                    Items.R15Parts.HumanoidRootPart = R15HRPOut
-                    R15HRPOut.MouseButton1Click:Connect(function()
-                        if self.R15Selected.HumanoidRootPart then
-                            self.R15Selected.HumanoidRootPart = nil
-                            R15HRPOut.BackgroundColor3 = rgb(40, 40, 40)
-                        else
-                            self.R15Selected.HumanoidRootPart = true
-                            R15HRPOut.BackgroundColor3 = self.HighlightColor
-                        end
-                    end)
-
-                    local R15MultiToggle = Library:Create("TextButton", {
-                        Parent = Items.PickerContainer;
-                        Name = "\0";
-                        Size = dim2(0, 80, 0, 22);
-                        Position = dim2(0.5, -40, 1, -30);
-                        BackgroundColor3 = rgb(50, 50, 50);
-                        TextColor3 = rgb(255, 255, 255);
-                        Text = "Multi: ON";
-                        TextSize = 11;
-                        BorderSizePixel = 1;
-                        BorderColor3 = rgb(70, 70, 70);
-                    })
-                    R15MultiToggle.MouseButton1Click:Connect(function()
-                        self.R15MultiMode = not self.R15MultiMode
-                        R15MultiToggle.Text = self.R15MultiMode and "Multi: ON" or "Multi: OFF"
-                        for name, btn in pairs(Items.R15Parts) do
-                            self.R15Selected[name] = nil
-                            btn.BackgroundColor3 = (name == "HumanoidRootPart") and rgb(40, 40, 40) or rgb(60, 60, 60)
-                        end
-                    end)
-                end
+                
+                Items.Parts = {}
             end
+
+            function Cfg.CreatePart(name, size, pos)
+                local btn = Library:Create("TextButton", {
+                    Parent = Items.Canvas;
+                    Size = size;
+                    Position = pos;
+                    BackgroundColor3 = rgb(60, 60, 60);
+                    BorderSizePixel = 1;
+                    BorderColor3 = rgb(80, 80, 80);
+                    Text = "";
+                    AutoButtonColor = false;
+                })
+                
+                local isR6 = Cfg.Name == "R6"
+                local SelectedTable = isR6 and self.R6Selected or self.R15Selected
+                local MultiMode = isR6 and self.R6MultiMode or self.R15MultiMode
+                local Highlight = self.HighlightColor
+
+                btn.MouseButton1Click:Connect(function()
+                    if SelectedTable[name] then
+                        SelectedTable[name] = nil
+                        btn.BackgroundColor3 = (name == "HumanoidRootPart") and rgb(40, 40, 40) or rgb(60, 60, 60)
+                    else
+                        if not MultiMode then 
+                            -- Clear other selections if multi is off
+                            for k, _ in pairs(SelectedTable) do
+                                SelectedTable[k] = nil
+                                if Items.Parts[k] then 
+                                    Items.Parts[k].BackgroundColor3 = (k == "HumanoidRootPart") and rgb(40, 40, 40) or rgb(60, 60, 60)
+                                end
+                            end
+                        end
+                        SelectedTable[name] = true
+                        btn.BackgroundColor3 = Highlight
+                    end
+                end)
+                Items.Parts[name] = btn
+                return btn
+            end
+
+            Items.MultiToggle.MouseButton1Click:Connect(function()
+                local isR6 = Cfg.Name == "R6"
+                if isR6 then self.R6MultiMode = not self.R6MultiMode end
+                if not isR6 then self.R15MultiMode = not self.R15MultiMode end
+                
+                Items.MultiToggle.Text = (isR6 and self.R6MultiMode or self.R15MultiMode) and "Multi: ON" or "Multi: OFF"
+                
+                local SelectedTable = isR6 and self.R6Selected or self.R15Selected
+                for name, btn in pairs(Items.Parts) do
+                    SelectedTable[name] = nil
+                    btn.BackgroundColor3 = (name == "HumanoidRootPart") and rgb(40, 40, 40) or rgb(60, 60, 60)
+                end
+            end)
 
             function Cfg.FlipPage()
                 local OldItems = self.CurrentTab 
-
                 if OldItems then 
                     OldItems.Holder.Visible = false
-                    OldItems.Holder.Parent = Library.Other
                     Library:Tween(OldItems.Title, {TextColor3 = themes.preset.unselected})
                 end 
-
                 Items.Holder.Visible = true 
-                Items.Holder.Parent = self.Items.PickerHolder
                 Library:Tween(Items.Title, {TextColor3 = themes.preset.text_color})
-
                 self.CurrentTab = Cfg.Items
             end
 
             Items.Outline.MouseButton1Click:Connect(Cfg.FlipPage)
 
-            if not self.CurrentTab then 
-                Cfg.FlipPage() 
-            end 
+            if not self.CurrentTab then Cfg.FlipPage() end 
 
             return setmetatable(Cfg, Library)
         end 
