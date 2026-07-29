@@ -4952,165 +4952,6 @@
                 end})
             -- 
         end
-            -- Settings
-                local ConfigText;
-                local Column = Tab:Column({})
-                local Section = Column:Section({Name = "Main"})
-                ConfigHolder = Section:List({
-                    Name = "Configs", 
-                    Flag = "config_Name_list", 
-                    Size = 100;
-                    Callback = function(option) 
-                        if Text and option then 
-                            Text.Set(option) 
-                        end 
-                    end, 
-                }); 
-                Library:UpdateConfigList();
-
-                Text = Section:Textbox({Name = "Config Name:", Flag = "config_Name_text", Callback = function(text)
-                    ConfigText = text
-                end})
-
-                Section:Button({Name = "Save", Callback = function() 
-                    writefile(Library.Directory .. "/configs/" .. ConfigText .. ".cfg", Library:GetConfig())
-                    Library:Notification({Name = "Saved config.", Lifetime = 5})
-                    Library:UpdateConfigList()
-                end})
-
-                Section:Button({Name = "Load", Callback = function() 
-                    Window.Tweening = true 
-                    Library:LoadConfig(readfile(Library.Directory .. "/configs/" .. ConfigText .. ".cfg"))  
-                    Library:Notification({Name = "Loaded config.", Lifetime = 5})
-                    Library:UpdateConfigList() 
-                    Window.Tweening = false 
-                end})
-
-                Section:Button({Name = "Delete", Callback = function() 
-                    delfile(Library.Directory .. "/configs/" .. ConfigText .. ".cfg")  
-                    Library:Notification({Name = "Deleted config.", Lifetime = 5})
-                    Library:UpdateConfigList() 
-                end})
-
-                local Section = Column:Section({Name = "Server"})
-                Section:Button({Name = "Copy JobId", Callback = function()
-                    setclipboard(game.JobId)
-                end})
-                Section:Button({Name = "Copy GameID", Callback = function()
-                    setclipboard(game.GameId)
-                end})
-                Section:Button({Name = "Copy Join Script", Callback = function()
-                    setclipboard('game:GetService("TeleportService"):TeleportToPlaceInstance(' .. game.PlaceId .. ', "' .. game.JobId .. '", game.Players.LocalPlayer)')
-                end})
-                Section:Button({Name = "Rejoin", Callback = function()
-                    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, lp)
-                end})
-                Section:Button({Name = "Join New Server", Callback = function()
-                    local apiRequest = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100"))
-                    local data = apiRequest.data[math.random(1, #apiRequest.data)]
-
-                    if data.playing <= Flags["MaxPlayers"] then 
-                        game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, data.id)
-                    end 
-                end})
-                Section:Slider({Name = "Max Players", Min = 0, Max = 40, Default = 10, Decimal = 1, Flag = "MaxPlayers"})
-
-            -- 
-
-            -- Theming 
-                local Column = Tab:Column({})
-                local Section = Column:Section({Name = "Other"})
-                Section:Label({Name = "Inline"}):Colorpicker({Color = themes.preset.inline, Callback = function(color, alpha)
-                    Library:RefreshTheme("inline", color)
-                end})
-                Section:Label({Name = "Outline"}):Colorpicker({Color = themes.preset.outline, Callback = function(color, alpha)
-                    Library:RefreshTheme("outline", color)
-                end})
-                Section:Label({Name = "Accent"}):Colorpicker({Color = themes.preset.accent, Callback = function(color, alpha)
-                    Library:RefreshTheme("accent", color)
-                end})
-                local Label = Section:Label({Name = "Background"})
-                Label:Colorpicker({Color = themes.preset.background, Callback = function(color, alpha)
-                    Library:RefreshTheme("background", color)
-                end})
-                Label:Colorpicker({Color = themes.preset.misc_1, Callback = function(color, alpha)
-                    Library:RefreshTheme("misc_1", color)
-                end})
-                Section:Label({Name = "Text Color"}):Colorpicker({Color = themes.preset.text_color, Callback = function(color, alpha)
-                    Library:RefreshTheme("text_color", color)
-                end})
-                Section:Label({Name = "Tooltip"}):Colorpicker({Color = themes.preset.tooltip, Callback = function(color, alpha)
-                    Library:RefreshTheme("tooltip", color)
-                end})
-                Section:Label({Name = "Unselected"}):Colorpicker({Color = themes.preset.unselected, Callback = function(color, alpha)
-                    Library:RefreshTheme("unselected", color)
-                end})
-                local Label = Section:Label({Name = "Element Gradients"})
-                Label:Colorpicker({Color = themes.preset.misc_1, Callback = function(color, alpha)
-                    Library:RefreshTheme("misc_1", color)
-
-                    for _,seq in themes.gradients.elements do
-                        seq.Color = rgbseq{rgbkey(0, themes.preset.misc_1), rgbkey(1, themes.preset.misc_2)}
-                    end
-                end, Flag = "Element Gradient 1"})
-                Label:Colorpicker({Color = themes.preset.misc_2, Callback = function(color, alpha)
-                    themes.preset.misc_2 = color 
-
-                    for _,seq in themes.gradients.elements do
-                        seq.Color = rgbseq{rgbkey(0, themes.preset.misc_1), rgbkey(1, themes.preset.misc_2)}
-                    end
-                end, Flag = "Element Gradient 2"})
-                Section:Slider({Name = "Tween Speed", Min = 0, Max = 3, Decimal = Library.DraggingSpeed, Default = .3, Callback = function(num)
-                    Library.TweeningSpeed = num
-                end})
-                Section:Dropdown({Name = "Tweening Style", Options = {"Linear", "Sine", "Back", "Quad", "Quart", "Quint", "Bounce", "Elastic", "Exponential", "Circular", "Cubic"}, Flag = "LibraryEasingStyle", Default = "Quint", Callback = function(Option)
-                    Library.EasingStyle = Enum.EasingStyle[Option]
-                end});
-                Section:Slider({Name = "Dragging Speed", Min = 0, Max = 1, Decimal = .01, Default = .05, Callback = function(num)
-                    Library.DraggingSpeed = num
-                end})
-                Section:Label({Name = "Menu Bind"}):Keybind({Name = "Menu Bind", Key = Enum.KeyCode.E, Callback = function(bool) 
-                    print(bool)
-                    Window.SetVisible(bool) 
-                end})
-                Window.Tweening = false
-                Section:Toggle({Name = "Toggle Watermark", Callback = function(bool)
-                    Window.SetWatermarkVisible(bool)
-                end})
-                Section:Toggle({Name = "Toggle Keybind List", Callback = function(bool)
-                    Library.KeybindList.Items.Holder.Visible = bool 
-                    Library.KeybindList.Items.List.Visible = bool 
-                end})
-                Section:Textbox({Name = "Custom Menu Name", Default = Window.Name, Callback = function(text)
-                    Window.Name = text
-                end})
-                Section:Dropdown({Name = "Font", Options = FontIndexes, Callback = function(option)
-                    for _,text in themes.utility.text_color.TextColor3 do 
-                        text.FontFace = Fonts[option]
-                    end 
-                end, Default = "ProggyClean", Flag = "Menu Font"})
-                Section:Slider({Name = "TextSize", Default = 12, Decimal = 1, Min = 1, Max = 30, Callback = function(int)
-                    for _,text in themes.utility.text_color.TextColor3 do 
-                        text.TextSize = int
-                    end 
-
-                    themes.preset.textsize = int
-                end})
-                Section:Slider({Name = "Blur Intensity", Default = 14, Decimal = 1, Min = 1, Max = 100, Flag = "BlurSize", Callback = function(int)
-                    if Window.Items.Holder.Visible then 
-                        Library.Blur.Size = int
-                    end 
-                end})
-                Section:Button({Name = "Test", Callback = function()
-                    local Notification = Library:Notification({Name = "Hello there!", Lifetime = 5})
-                    Notification:NotificationButton({Name = "Discard", Callback = function()
-                        Notification.DestroyNotif()
-                    end})
-                    Notification:NotificationButton({Name = "Make another", Callback = function()
-                    end})
-                end})
-            -- 
-        end
     --
         
     -- Notification Library
@@ -5474,6 +5315,78 @@
 
         local Options = setmetatable({}, {__index = MiscOptions, __newindex = function(self, key, value) MiscOptions[key] = value Esp.RefreshElements(key, value) end});
 
+        function Library:EspPreview(properties)
+            local Cfg = {
+                Items = {};
+                CurrentTab;
+                Section = self;
+            } 
+
+            local Items = Cfg.Items; do 
+                Items.ESPHolder = Library:Create( "TextButton" , {
+                    Parent = self.Items.Elements;
+                    Name = "\0";
+                    Size = dim2(1, 0, 0, 0);
+                    BorderColor3 = rgb(0, 0, 0);
+                    BorderSizePixel = 0;
+                    AutomaticSize = Enum.AutomaticSize.Y;
+                    BackgroundColor3 = themes.preset.outline
+                });	Library:Themify(Items.ESPHolder, "outline", "BackgroundColor3")
+
+                Library:Create( "UIPadding" , {
+                    PaddingTop = dim(0, 1);
+                    PaddingBottom = dim(0, 1);
+                    Parent = Items.ESPHolder;
+                    PaddingRight = dim(0, 1);
+                    PaddingLeft = dim(0, 1)
+                });
+
+                Library:Create( "UIListLayout" , {
+                    Parent = Items.ESPHolder;
+                    Padding = dim(0, -1);
+                    SortOrder = Enum.SortOrder.LayoutOrder;
+                    HorizontalFlex = Enum.UIFlexAlignment.Fill
+                });
+
+                Items.Outline = Library:Create( "Frame" , {
+                    LayoutOrder = -1;
+                    Name = "\0";
+                    Parent = Items.ESPHolder;
+                    BorderColor3 = rgb(0, 0, 0);
+                    Size = dim2(1, 0, 0, 18);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = themes.preset.inline
+                });	Library:Themify(Items.Outline, "inline", "BackgroundColor3")
+
+                Items.TabHolder = Library:Create( "Frame" , {
+                    Parent = Items.Outline;
+                    Name = "\0";
+                    Position = dim2(0, 1, 0, 1);
+                    BorderColor3 = rgb(0, 0, 0);
+                    Size = dim2(1, -2, 1, -2);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = themes.preset.misc_1
+                });	Library:Themify(Items.TabHolder, "misc_1", "BackgroundColor3")
+
+                Library:Create( "UIListLayout" , {
+                    Parent = Items.TabHolder;
+                    Padding = dim(0, -1);
+                    SortOrder = Enum.SortOrder.LayoutOrder;
+                    FillDirection = Enum.FillDirection.Horizontal
+                });
+
+                Library:Create( "UIPadding" , {
+                    PaddingTop = dim(0, -1);
+                    PaddingBottom = dim(0, -1);
+                    Parent = Items.TabHolder;
+                    PaddingRight = dim(0, -1);
+                    PaddingLeft = dim(0, -1)
+                });
+            end    
+
+            return setmetatable(Cfg, Library)
+        end 
+
         function Library:HitpartPicker(properties)
             local Cfg = {
                 Items = {};
@@ -5488,7 +5401,6 @@
             } 
 
             local Items = Cfg.Items; do 
-                -- Holder Tab button
                 Items.PickerHolder = Library:Create( "TextButton" , {
                     Parent = self.Items.Elements;
                     Name = "\0";
@@ -5511,7 +5423,6 @@
                     TextSize = 12;
                 }); Library:Themify(Items.Title, "unselected", "TextColor3")
 
-                -- Pop-out Window
                 Items.PickerFrame = Library:Create( "Frame" , {
                     Parent = Library.Other;
                     Name = "\0";
@@ -5589,7 +5500,6 @@
                 Library:Resizify(Items.PickerFrame)
             end    
 
-            -- R6/R15 Canvas Frames
             Items.R6Canvas = Library:Create( "Frame" , {
                 Parent = Library.Other;
                 Name = "\0";
@@ -5634,76 +5544,6 @@
                 end
                 Library:Connection(Tween.Completed, function() Cfg.Tweening = false; Items.PickerFrame.Visible = bool end)
             end
-
-            return setmetatable(Cfg, Library)
-        end 
-            local Cfg = {
-                Items = {};
-                CurrentTab;
-                Section = self;
-            } 
-
-            local Items = Cfg.Items; do 
-                Items.ESPHolder = Library:Create( "TextButton" , {
-                    Parent = self.Items.Elements;
-                    Name = "\0";
-                    Size = dim2(1, 0, 0, 0);
-                    BorderColor3 = rgb(0, 0, 0);
-                    BorderSizePixel = 0;
-                    AutomaticSize = Enum.AutomaticSize.Y;
-                    BackgroundColor3 = themes.preset.outline
-                });	Library:Themify(Items.ESPHolder, "outline", "BackgroundColor3")
-
-                Library:Create( "UIPadding" , {
-                    PaddingTop = dim(0, 1);
-                    PaddingBottom = dim(0, 1);
-                    Parent = Items.ESPHolder;
-                    PaddingRight = dim(0, 1);
-                    PaddingLeft = dim(0, 1)
-                });
-
-                Library:Create( "UIListLayout" , {
-                    Parent = Items.ESPHolder;
-                    Padding = dim(0, -1);
-                    SortOrder = Enum.SortOrder.LayoutOrder;
-                    HorizontalFlex = Enum.UIFlexAlignment.Fill
-                });
-
-                Items.Outline = Library:Create( "Frame" , {
-                    LayoutOrder = -1;
-                    Name = "\0";
-                    Parent = Items.ESPHolder;
-                    BorderColor3 = rgb(0, 0, 0);
-                    Size = dim2(1, 0, 0, 18);
-                    BorderSizePixel = 0;
-                    BackgroundColor3 = themes.preset.inline
-                });	Library:Themify(Items.Outline, "inline", "BackgroundColor3")
-
-                Items.TabHolder = Library:Create( "Frame" , {
-                    Parent = Items.Outline;
-                    Name = "\0";
-                    Position = dim2(0, 1, 0, 1);
-                    BorderColor3 = rgb(0, 0, 0);
-                    Size = dim2(1, -2, 1, -2);
-                    BorderSizePixel = 0;
-                    BackgroundColor3 = themes.preset.misc_1
-                });	Library:Themify(Items.TabHolder, "misc_1", "BackgroundColor3")
-
-                Library:Create( "UIListLayout" , {
-                    Parent = Items.TabHolder;
-                    Padding = dim(0, -1);
-                    SortOrder = Enum.SortOrder.LayoutOrder;
-                    FillDirection = Enum.FillDirection.Horizontal
-                });
-
-                Library:Create( "UIPadding" , {
-                    PaddingTop = dim(0, -1);
-                    PaddingBottom = dim(0, -1);
-                    Parent = Items.TabHolder;
-                    PaddingRight = dim(0, -1);
-                    PaddingLeft = dim(0, -1)
-                });
-            end    
 
             return setmetatable(Cfg, Library)
         end 
