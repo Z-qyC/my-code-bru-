@@ -5558,7 +5558,7 @@
             local Items = Cfg.Items; do 
                 -- Tab button
                 Items.Outline = Library:Create( "TextButton" , {
-                    Parent = self.Items.PickerContainer; -- Put inside the main picker, NOT its own holder
+                    Parent = self.Items.PickerContainer;
                     Name = "\0";
                     Size = dim2(0, 50, 0, 18);
                     BorderColor3 = rgb(0, 0, 0);
@@ -5641,7 +5641,6 @@
                         btn.BackgroundColor3 = (name == "HumanoidRootPart") and rgb(40, 40, 40) or rgb(60, 60, 60)
                     else
                         if not MultiMode then 
-                            -- Clear other selections if multi is off
                             for k, _ in pairs(SelectedTable) do
                                 SelectedTable[k] = nil
                                 if Items.Parts[k] then 
@@ -5685,6 +5684,84 @@
             Items.Outline.MouseButton1Click:Connect(Cfg.FlipPage)
 
             if not self.CurrentTab then Cfg.FlipPage() end 
+
+            -- ==========================================================
+            --  GENERATE R6 / R15 PARTS INSIDE THE CANVAS
+            -- ==========================================================
+            if Cfg.Name == "R6" then
+                local function createR6Part(name, size, pos)
+                    return Cfg.CreatePart(name, size, pos)
+                end
+                createR6Part("Head", dim2(0, 50, 0, 44), dim2(0.5, -25, 0, 10))
+                createR6Part("Torso", dim2(0, 84, 0, 90), dim2(0.5, -42, 0, 56))
+                createR6Part("LeftArm", dim2(0, 40, 0, 90), dim2(0.5, -86, 0, 56))
+                createR6Part("RightArm", dim2(0, 40, 0, 90), dim2(0.5, 46, 0, 56))
+                createR6Part("LeftLeg", dim2(0, 40, 0, 90), dim2(0.5, -42, 0, 148))
+                createR6Part("RightLeg", dim2(0, 40, 0, 90), dim2(0.5, 2, 0, 148))
+                
+                local R6HRPOut = Library:Create("TextButton", {
+                    Parent = Items.Canvas;
+                    Size = dim2(0, 20, 0, 20);
+                    Position = dim2(0.5, -10, 0, 90);
+                    BackgroundColor3 = rgb(40, 40, 40);
+                    BorderColor3 = rgb(60, 60, 60);
+                    BorderSizePixel = 1;
+                    Text = "";
+                    AutoButtonColor = false;
+                })
+                Items.Parts.HumanoidRootPart = R6HRPOut
+                R6HRPOut.MouseButton1Click:Connect(function()
+                    if self.R6Selected.HumanoidRootPart then
+                        self.R6Selected.HumanoidRootPart = nil
+                        R6HRPOut.BackgroundColor3 = rgb(40, 40, 40)
+                    else
+                        self.R6Selected.HumanoidRootPart = true
+                        R6HRPOut.BackgroundColor3 = self.HighlightColor
+                    end
+                end)
+
+            elseif Cfg.Name == "R15" then
+                local function createR15Part(name, size, pos)
+                    return Cfg.CreatePart(name, size, pos)
+                end
+                createR15Part("Head", dim2(0, 50, 0, 44), dim2(0.5, -25, 0, 8))
+                createR15Part("UpperTorso", dim2(0, 84, 0, 76), dim2(0.5, -42, 0, 56))
+                createR15Part("LowerTorso", dim2(0, 84, 0, 10), dim2(0.5, -42, 0, 136))
+                createR15Part("LeftUpperArm", dim2(0, 40, 0, 34), dim2(0.5, -86, 0, 56))
+                createR15Part("RightUpperArm", dim2(0, 40, 0, 34), dim2(0.5, 46, 0, 56))
+                createR15Part("LeftLowerArm", dim2(0, 40, 0, 42), dim2(0.5, -86, 0, 94))
+                createR15Part("RightLowerArm", dim2(0, 40, 0, 42), dim2(0.5, 46, 0, 94))
+                createR15Part("LeftHand", dim2(0, 40, 0, 6), dim2(0.5, -86, 0, 140))
+                createR15Part("RightHand", dim2(0, 40, 0, 6), dim2(0.5, 46, 0, 140))
+                createR15Part("LeftUpperLeg", dim2(0, 40, 0, 34), dim2(0.5, -42, 0, 150))
+                createR15Part("RightUpperLeg", dim2(0, 40, 0, 34), dim2(0.5, 2, 0, 150))
+                createR15Part("LeftLowerLeg", dim2(0, 40, 0, 42), dim2(0.5, -42, 0, 188))
+                createR15Part("RightLowerLeg", dim2(0, 40, 0, 42), dim2(0.5, 2, 0, 188))
+                createR15Part("LeftFoot", dim2(0, 40, 0, 6), dim2(0.5, -42, 0, 234))
+                createR15Part("RightFoot", dim2(0, 40, 0, 6), dim2(0.5, 2, 0, 234))
+                
+                local R15HRPOut = Library:Create("TextButton", {
+                    Parent = Items.Canvas;
+                    Size = dim2(0, 20, 0, 20);
+                    Position = dim2(0.5, -10, 0, 88);
+                    BackgroundColor3 = rgb(40, 40, 40);
+                    BorderColor3 = rgb(60, 60, 60);
+                    BorderSizePixel = 1;
+                    Text = "";
+                    AutoButtonColor = false;
+                })
+                Items.Parts.HumanoidRootPart = R15HRPOut
+                R15HRPOut.MouseButton1Click:Connect(function()
+                    if self.R15Selected.HumanoidRootPart then
+                        self.R15Selected.HumanoidRootPart = nil
+                        R15HRPOut.BackgroundColor3 = rgb(40, 40, 40)
+                    else
+                        self.R15Selected.HumanoidRootPart = true
+                        R15HRPOut.BackgroundColor3 = self.HighlightColor
+                    end
+                end)
+            end
+            -- ==========================================================
 
             return setmetatable(Cfg, Library)
         end 
