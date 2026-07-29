@@ -5522,7 +5522,7 @@
 
             function Cfg.SetVisible(bool)
                 if Cfg.Tweening then return end 
-                Items.PickerFrame.Position = dim2(0, Items.PickerHolder.AbsolutePosition.X + 2, 0, Items.PickerHolder.AbsolutePosition.Y + 24)
+                Items.PickerFrame.Position = dim_offset(Items.PickerHolder.AbsolutePosition.X + 2, Items.PickerHolder.AbsolutePosition.Y + 24)
                 Cfg.Tween(bool)
             end
 
@@ -5598,7 +5598,8 @@
                     Position = dim2(0.5, -110, 0, 10);
                     BackgroundColor3 = rgb(22, 22, 22);
                     BorderSizePixel = 1;
-                    BorderColor3 = rgb(50, 50, 50)
+                    BorderColor3 = rgb(50, 50, 50);
+                    Visible = true
                 });
 
                 -- Multi Toggle Button
