@@ -1497,7 +1497,31 @@
                         LineJoinMode = Enum.LineJoinMode.Miter;
                         Parent = Items.InnerOutline;
                         Thickness = 10000
-                    }); Library:Themify(Stroke, "outline", "Color");
+                });	Library:Themify(Stroke, "outline", "Color");
+                Items.Glow = Library:Create( "ImageLabel", {
+                    ImageColor3 = themes.preset.accent;
+                    ScaleType = Enum.ScaleType.Slice;
+                    Parent = Items.Holder;
+                    ImageTransparency = 0.65;
+                    BorderColor3 = rgb(0, 0, 0);
+                    Name = "\0";
+                    Size = dim2(1, 41, 1, 41);
+                    BorderSizePixel = 0;
+                    AnchorPoint = vec2(0.5, 0.5);
+                    Image = "rbxassetid://18245826428";
+                    BackgroundTransparency = 1;
+                    Position = dim2(0.5, 0, 0.5, 0);
+                    BackgroundColor3 = rgb(255, 255, 255);
+                    AutomaticSize = Enum.AutomaticSize.XY;
+                    SliceCenter = rect(vec2(21, 21), vec2(79, 79))
+                }); Library:Themify(Items.Glow, "accent", "ImageColor3")
+                Library:Create( "UIPadding", {
+                    PaddingTop = dim(0, 20);
+                    PaddingBottom = dim(0, 20);
+                    Parent = Items.Glow;
+                    PaddingRight = dim(0, 20);
+                    PaddingLeft = dim(0, 20)
+                });
                     Items.Title = Library:Create( "TextLabel" , {
                         FontFace = Fonts[themes.preset.font];
                         TextColor3 = rgb(235, 235, 235);
@@ -1633,6 +1657,9 @@
                 end
                 Library:Tween(Library.Blur, {Size = bool and (Flags["BlurSize"] or 15) or 0})
                 Cfg.Tween(bool)
+                if Library.ESPHolder then
+                    Library.ESPHolder.Visible = bool
+                end
             end
             function Cfg.Tween(bool)
                 if Library.Tweening then
@@ -1944,6 +1971,20 @@
                 Library:Draggify(Items.Window)
                 Library:Resizify(Items.Window)
             end
+            if not Library.MainPanel then
+                Library.MainPanel = Items.Window
+                local function updateESPPosition()
+                    if Library.ESPHolder and Library.ESPHolder.Parent then
+                        local panelPos = Items.Window.Position
+                        local panelSize = Items.Window.Size
+                        local offsetX = panelPos.X.Offset + panelSize.X.Offset + 15
+                        local offsetY = panelPos.Y.Offset
+                        Library.ESPHolder.Position = dim2(0, offsetX, 0, offsetY)
+                    end
+                end
+                Items.Window:GetPropertyChangedSignal("Position"):Connect(updateESPPosition)
+                task.delay(0.1, updateESPPosition)
+            end
             function Cfg.ChangeName(string)
                 Items.Title.Text = string
             end
@@ -1988,6 +2029,9 @@
                 Library:Connection(Tween.Completed, function()
                     Cfg.Tweening = false
                     Items.Window.Visible = bool
+                    if Library.ESPHolder then
+                        Library.ESPHolder.Visible = bool
+                    end
                 end)
             end
             Items.Window.MouseEnter:Connect(function()
@@ -4487,12 +4531,14 @@
                 Items.ESPHolder = Library:Create( "TextButton" , {
                     Parent = Library.Elements;
                     Name = "\0";
+                    Position = dim2(1, -260, 0, 20);
                     Size = dim2(0, 240, 0, 0);
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.Y;
                     BackgroundColor3 = themes.preset.outline
-                });	Library:Themify(Items.ESPHolder, "outline", "BackgroundColor3"); Library:Draggify(Items.ESPHolder)
+                });	Library:Themify(Items.ESPHolder, "outline", "BackgroundColor3");
+                Library.ESPHolder = Items.ESPHolder
                 Library:Create( "UIPadding" , {
                     PaddingTop = dim(0, 1);
                     PaddingBottom = dim(0, 1);
@@ -4635,10 +4681,21 @@
                     Library:Create( "UIPadding" , {
                         Parent = Items.Background
                     });
-                    Items.ViewportFrame = Library:Create( "ViewportFrame" , {
+                    Items.ViewportOutline = Library:Create( "Frame" , {
                         Parent = Items.Background;
+                        Name = "\0";
+                        Size = dim2(0, 204, 0, 204);
+                        Position = dim2(0.5, -102, 0, 10);
+                        BorderColor3 = themes.preset.accent;
+                        BorderSizePixel = 1;
+                        BackgroundTransparency = 1;
+                        BackgroundColor3 = themes.preset.outline
+                    }); Library:Themify(Items.ViewportOutline, "accent", "BorderColor3")
+                    Items.ViewportFrame = Library:Create( "ViewportFrame" , {
+                        Parent = Items.ViewportOutline;
                         BorderColor3 = rgb(0, 0, 0);
-                        Size = dim2(0, 200, 0, 200);
+                        Size = dim2(1, -4, 1, -4);
+                        Position = dim2(0, 2, 0, 2);
                         BorderSizePixel = 0;
                         ClipsDescendants = true;
                         BackgroundColor3 = themes.preset.misc_1
@@ -6084,30 +6141,31 @@
                 Cfg.VisualizedModel.Parent = Items.ViewportFrame
             end
             Cfg.VisualizedModel:SetPrimaryPartCFrame(CFrame.new(Vector3.new(0, Cfg.ModelOffset, -8)))
-                local Dragging = false
-                local MousePos = nil
-                local Sensitivity = 0.01
-                local Angle = CFrame.Angles(0, math.rad(-180), 0)
-                local Cache = Angle
-                Items.ViewportFrame.InputBegan:Connect(function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                        Dragging = true
-                        MousePos = input.Position
-                    end
-                end)
-                Items.ViewportFrame.InputEnded:Connect(function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                        Dragging = false
-                        Cfg.VisualizedModel:SetPrimaryPartCFrame(CFrame.new(Vector3.new(0, Cfg.ModelOffset, -8)) * CFrame.Angles(0, math.rad(-180), 0))
-                        Angle = CFrame.Angles(0, math.rad(-180), 0)
-                    end
-                end)
-                InputService.InputChanged:Connect(function(input)
-                    if Dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-                        local delta = input.Position - MousePos
-                        MousePos = input.Position
-                        Angle *= CFrame.Angles(0, delta.X * Sensitivity, 0)
-                        Cfg.VisualizedModel:SetPrimaryPartCFrame(CFrame.new(Vector3.new(0, Cfg.ModelOffset, -8)) * Angle)
+                local rotationAngle = 0
+                local function centerModel()
+                    local model = Cfg.VisualizedModel
+                    local primary = model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart")
+                    if not primary then return end
+                    local cf, size = Math:GetBoundingBox(model)
+                    local center = cf.Position
+                    local maxDim = math.max(size.X, size.Y, size.Z)
+                    local camDist = maxDim * 1.8
+                    Items.Camera.CFrame = CFrame.new(center + Vector3.new(0, 0, camDist), center)
+                    Items.Camera.Focus = CFrame.new(center)
+                end
+                task.delay(0.1, centerModel)
+                Library:Connection(RunService.RenderStepped, function(dt)
+                    rotationAngle = rotationAngle + dt * 1.2
+                    local model = Cfg.VisualizedModel
+                    local primary = model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart")
+                    if primary then
+                        local cf, size = Math:GetBoundingBox(model)
+                        local center = cf.Position
+                        local maxDim = math.max(size.X, size.Y, size.Z)
+                        local camDist = maxDim * 1.8
+                        local baseCF = CFrame.new(center + Vector3.new(0, 0, camDist), center)
+                        Items.Camera.CFrame = baseCF * CFrame.Angles(0, rotationAngle, 0)
+                        Items.Camera.Focus = CFrame.new(center)
                     end
                 end)
                 Items.Outline.MouseButton1Click:Connect(Cfg.FlipPage)
