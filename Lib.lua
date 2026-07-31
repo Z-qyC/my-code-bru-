@@ -195,7 +195,7 @@ do
     }
 
     -- Folders
-    if not isfolder(Library.Directory) then
+    if not isfolder("AXIOM.IIV") then
         makefolder(Library.Directory)
     end
 
