@@ -7518,6 +7518,135 @@ do
                     BackgroundTransparency = 1
                 })
 
+                -- 3D ASSET VIEWPORT ADDED HERE
+                Items["TitleViewport"] = Library:Create("ViewportFrame", {
+                    Name = "\0",
+                    Parent = Items["TitleBar"].Instance,
+                    AnchorPoint = Vector2.new(0, 0.5),
+                    Position = UDim2.new(0, 4, 0.5, 0),
+                    Size = UDim2.new(0, 18, 0, 18),
+                    BackgroundTransparency = 1,
+                    BorderSizePixel = 0,
+                    Ambient = Color3.fromRGB(255, 255, 255),
+                    LightColor = Color3.fromRGB(255, 255, 255),
+                    LightDirection = Vector3.new(-1, -1, -1)
+                })
+
+                -- LOAD 3D ASSET LOGIC
+                Library:Thread(function()
+                    local Success, Result = pcall(function() return game:GetObjects("rbxassetid://110825143066428") end)
+                    if Success and Result and #Result > 0 then
+                        local Asset = Result[1]
+                        local Model = Asset:IsA("Model") and Asset or Instance.new("Model")
+                        if not Asset:IsA("Model") then Asset.Parent = Model end
+                        
+                        -- Setup Model inside Viewport
+                        Model.Parent = Items["TitleViewport"].Instance
+                        local Center, Size = Model:GetBoundingBox()
+                        
+                        -- Setup Camera
+                        local Cam = Instance.new("Camera")
+                        Cam.FieldOfView = 20
+                        Items["TitleViewport"].Instance.CurrentCamera = Cam
+                        local MaxDim = math.max(Size.X, Size.Y, Size.Z)
+                        local Distance = MaxDim / math.tan(math.rad(Cam.FieldOfView / 2)) * 0.7
+                        Cam.CFrame = CFrame.new(Center.Position + Vector3.new(0, 0, Distance), Center.Position)
+                        
+                        -- Animate Spin & Magma Wave
+                        local Parts = {}
+                        local Offsets = {}
+                        for _, Desc in ipairs(Model:GetDescendants()) do
+                            if Desc:IsA("BasePart") then
+                                Desc.Anchored = true
+                                Desc.Material = Enum.Material.ForceField
+                                Desc.Color = Color3.fromRGB(5, 5, 5)
+                                Desc.Transparency = 0
+                                table.insert(Parts, Desc)
+                                Offsets[Desc] = CFrame.new(Center.Position):Inverse() * Desc.CFrame
+                            end
+                        end
+                        
+                        local TimeElapsed = 0
+                        while Library and Items["TitleViewport"] and Items["TitleViewport"].Instance.Parent do
+                            TimeElapsed = TimeElapsed + 0.03
+                            local RotCF = CFrame.Angles(0, TimeElapsed * 1.2, 0)
+                            for i, Part in ipairs(Parts) do
+                                if Part and Part.Parent then
+                                    Part.CFrame = CFrame.new(Center.Position) * RotCF * Offsets[Part]
+                                    local Wave = math.sin(TimeElapsed * 1 + (i * 0.5)) * 0.5 + 0.5
+                                    Part.Color = Color3.new(
+                                        math.clamp(0.05 + Wave * 0.95, 0, 1),
+                                        math.clamp(0 + Wave * 0.35, 0, 1),
+                                        math.clamp(0 + Wave * 0.08, 0, 1)
+                                    )
+                                end
+                            end
+                            task.wait(0.03)
+                        end
+                    end
+                end)
+
+                Items["TitleText"] = Library:Create("TextLabel", {
+                    Name = "\0",
+                    FontFace = Library.Font,
+                    TextSize = Library.FontSize,
+                    Parent = Items["TitleBar"].Instance,
+                    TextColor3 = Library.Theme["Accent"],
+                    Text = "AXIOM.IIV",
+                    AnchorPoint = Vector2.new(0, 0.5),
+                    Position = UDim2.new(0, 30, 0.5, 0),
+                    Size = UDim2.new(0, 0, 0, 15),
+                    BackgroundTransparency = 1,
+                    BorderSizePixel = 0,
+                    AutomaticSize = Enum.AutomaticSize.X
+                }):AddToTheme({ TextColor3 = "Accent" })
+
+                Library:Create("UIGradient", {
+                    Name = "\0",
+                    Parent = Items["TitleText"].Instance,
+                    Offset = Vector2.new(0, 0),
+                    Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.25, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.75, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 0, 0))
+                    })
+                })
+
+                Items["TitleBarWave"] = Library:Create("Frame", {
+                    Name = "\0",
+                    Parent = Items["TitleBar"].Instance,
+                    AnchorPoint = Vector2.new(0, 1),
+                    Position = UDim2.new(0, 0, 1, 0),
+                    Size = UDim2.new(1, 0, 0, 1),
+                    BorderSizePixel = 0,
+                    BackgroundColor3 = Library.Theme["Accent"]
+                }):AddToTheme({ BackgroundColor3 = "Accent" })
+
+                Library:Create("UIGradient", {
+                    Name = "\0",
+                    Parent = Items["TitleBarWave"].Instance,
+                    Offset = Vector2.new(0, 0),
+                    Transparency = NumberSequence.new({
+                        NumberSequenceKeypoint.new(0, 0),
+                        NumberSequenceKeypoint.new(0.25, 1),
+                        NumberSequenceKeypoint.new(0.5, 0),
+                        NumberSequenceKeypoint.new(0.75, 1),
+                        NumberSequenceKeypoint.new(1, 0)
+                    })
+                })
+
+                Items["MainFrame"] = Library:Create("Frame", {
+                    Name = "\0",
+                    Parent = Library.Holder.Instance,
+                    AnchorPoint = Vector2.new(0.5, 0.5),
+                    Position = UDim2.new(0.5, 0, 0.5, 0),
+                    Size = UDim2.new(0, 552, 0, 600),
+                    BorderSizePixel = 0,
+                    BackgroundColor3 = Library.Theme["Background"]
+                }):AddToTheme({ BackgroundColor3 = 'Background' })
+
 Items["Logo"] = Library:Create("ImageLabel", {
     Name = "\0",
     Parent = Items["TitleBar"].Instance,
