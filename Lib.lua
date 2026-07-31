@@ -5330,6 +5330,7 @@ Items.ESPHolder = Library:Create( "TextButton" , {
     Parent = Library.Items;
     Position = dim2(1, 10, 0, 30);
     AnchorPoint = vec2(1, 0);
+    Size = dim2(0, 300, 0, 400);
                     Name = "\0";
                     Size = dim2(1, 0, 0, 0);
                     BorderColor3 = rgb(0, 0, 0);
@@ -5353,7 +5354,7 @@ Library:Create( "UIListLayout" , {
     HorizontalFlex = Enum.UIFlexAlignment.Fill
 });
 
--- Make it draggable and closable with the main GUI
+-- Make it draggable
 Library:Draggify(Items.ESPHolder)
                 Items.Outline = Library:Create( "Frame" , {
                     LayoutOrder = -1;
@@ -5463,15 +5464,15 @@ Library:Draggify(Items.ESPHolder)
                 -- Middle page
 Items.Holder = Library:Create( "Frame" , {
     Parent = Library.Items;
-                        Name = "\0";
-                        Visible = false;
-                        Size = dim2(0, 100, 0, 100);
-                        BorderColor3 = rgb(0, 0, 0);
-                        BorderSizePixel = 0;
-                        BackgroundTransparency = 1;
-                        AutomaticSize = Enum.AutomaticSize.Y;
-                        BackgroundColor3 = rgb(255, 255, 255)
-                    });
+    Name = "\0";
+    Visible = false;
+    Size = dim2(1, -10, 1, -10);
+    BorderColor3 = rgb(0, 0, 0);
+    BorderSizePixel = 0;
+    BackgroundTransparency = 1;
+    AutomaticSize = Enum.AutomaticSize.None;
+    BackgroundColor3 = rgb(255, 255, 255)
+});
 
                     Items.CharacterHolder = Library:Create( "Frame" , {
                         Parent = Items.Holder;
