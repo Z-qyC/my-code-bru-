@@ -5779,6 +5779,19 @@ do
                     BackgroundColor3 = Library.Theme["Accent"]
                 }):AddToTheme({ BackgroundColor3 = "Accent" })
 
+                Library:Create("UIGradient", {
+                    Name = "\0",
+                    Parent = Items["AccentLiner"].Instance,
+                    Offset = Vector2.new(0, 0),
+                    Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.25, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.75, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 0, 0))
+                    })
+                })
+
                 Items["SearchBackground"] = Library:Create("Frame", {
                     Name = "\0",
                     Parent = Items["SpotifyPlayer"].Instance,
@@ -7527,7 +7540,14 @@ end)
 Library:Create("UIGradient", {
     Name = "\0",
     Parent = Items["Logo"].Instance,
-    Offset = Vector2.new(0, 0)
+    Offset = Vector2.new(0, 0),
+    Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 0, 0)),
+        ColorSequenceKeypoint.new(0.25, Color3.fromRGB(20, 20, 20)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 0, 0)),
+        ColorSequenceKeypoint.new(0.75, Color3.fromRGB(20, 20, 20)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 0, 0))
+    })
 })
 
                 Items["TitleText"] = Library:Create("TextLabel", {
@@ -7544,6 +7564,19 @@ Library:Create("UIGradient", {
                     BorderSizePixel = 0,
                     AutomaticSize = Enum.AutomaticSize.X
                 }):AddToTheme({ TextColor3 = "Accent" })
+
+                Library:Create("UIGradient", {
+                    Name = "\0",
+                    Parent = Items["TitleText"].Instance,
+                    Offset = Vector2.new(0, 0),
+                    Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.25, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.75, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 0, 0))
+                    })
+                })
 
                 Items["TitleBarWave"] = Library:Create("Frame", {
                     Name = "\0",
@@ -8145,6 +8178,24 @@ Library:Create("UIGradient", {
                     if Items["AccentLiner"] and Items["AccentLiner"].Instance and Items["AccentLiner"].Instance.Parent then
                         local MainGradient = Items["AccentLiner"].Instance:FindFirstChildOfClass("UIGradient")
                         if MainGradient then MainGradient.Offset = Vector2.new(Time, 0) end
+                    end
+
+                    -- Animate the TitleBar's Logo and Text
+                    if Items["TitleBar"] and Items["TitleBar"].Instance and Items["TitleBar"].Instance.Parent then
+                        local LogoGrad = Items["Logo"] and Items["Logo"].Instance and Items["Logo"].Instance:FindFirstChildOfClass("UIGradient")
+                        if LogoGrad then LogoGrad.Offset = Vector2.new(Time, 0) end
+                        
+                        local TextGrad = Items["TitleText"] and Items["TitleText"].Instance and Items["TitleText"].Instance:FindFirstChildOfClass("UIGradient")
+                        if TextGrad then TextGrad.Offset = Vector2.new(Time, 0) end
+                    end
+
+                    -- Animate the Spotify Player (Since it's not in Library table, we use the global Window Items)
+                    if Items["SpotifyPlayer"] and Items["SpotifyPlayer"].Instance and Items["SpotifyPlayer"].Instance.Parent then
+                        local SpotLiner = Items["SpotifyPlayer"].Instance:FindFirstChild("AccentLiner")
+                        if SpotLiner then
+                            local SpotGrad = SpotLiner:FindFirstChildOfClass("UIGradient")
+                            if SpotGrad then SpotGrad.Offset = Vector2.new(Time, 0) end
+                        end
                     end
 
                     task.wait(0.03)
