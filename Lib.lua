@@ -1491,14 +1491,6 @@ local Items = Cfg.Items; do
                         LineJoinMode = Enum.LineJoinMode.Miter;
                         Parent = Items.SecondInline
                     });	Library:Themify(Stroke, "outline", "Color");
-                    Items.Accent = Library:Create( "Frame" , {
-                        Name = "\0";
-                        Parent = Items.SecondInline;
-                        BorderColor3 = rgb(0, 0, 0);
-                        Size = dim2(1, 0, 0, 1);
-                        BorderSizePixel = 0;
-                        BackgroundColor3 = themes.preset.accent
-                    });	Library:Themify(Items.Accent, "accent", "BackgroundColor3")
                     Items.ThirdInline = Library:Create( "Frame" , {
                         Parent = Items.SecondInline;
                         Name = "\0";
