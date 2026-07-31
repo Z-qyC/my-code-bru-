@@ -7523,13 +7523,20 @@ do
                     Name = "\0",
                     Parent = Items["TitleBar"].Instance,
                     AnchorPoint = Vector2.new(0, 0.5),
-                    Position = UDim2.new(0, 4, 0.5, 0),
-                    Size = UDim2.new(0, 18, 0, 18),
-                    BackgroundTransparency = 1,
+                    Position = UDim2.new(0, 8, 0.5, 0),
+                    Size = UDim2.new(0, 24, 0, 24),
+                    BackgroundTransparency = 0.2,
+                    BackgroundColor3 = Color3.fromRGB(0, 0, 0),
                     BorderSizePixel = 0,
                     Ambient = Color3.fromRGB(255, 255, 255),
                     LightColor = Color3.fromRGB(255, 255, 255),
                     LightDirection = Vector3.new(-1, -1, -1)
+                })
+
+                Library:Create("UICorner", {
+                    Name = "\0",
+                    Parent = Items["TitleViewport"].Instance,
+                    CornerRadius = UDim.new(0, 4)
                 })
 
                 -- LOAD 3D ASSET LOGIC
