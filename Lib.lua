@@ -200,8 +200,8 @@ do
     end
 
     for _, Folder in Library.Folders do
-        if not isfolder(Library.Directory .. Folder) then
-            makefolder(Library.Directory .. Folder)
+ if not isfolder("AXIOM.IIV" .. Folder) then
+    makefolder("AXIOM.IIV" .. Folder)
         end
     end
 
