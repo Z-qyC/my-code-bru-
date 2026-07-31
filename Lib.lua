@@ -70,7 +70,7 @@ local Library = {
     Flags = {},
     MenuKeybind = tostring(Enum.KeyCode.X),
 
-    Directory = "niggahack",
+    Directory = "AXIOM.IIV",
     Folders = {
         Assets = "/Assets",
         Configs = "/Configs"
@@ -2716,7 +2716,7 @@ do
 
         Library.Watermark = function(Self, Params)
             local Watermark = {}
-            local PrefixText = tostring((Params and Params.Name) or "niggahack")
+            local PrefixText = tostring((Params and Params.Name) or "AXIOM.IIV")
             local WatermarkTick = tick()
             local WatermarkFps = 0
             local WatermarkDisplayedFps = 0
@@ -2781,10 +2781,12 @@ do
                     Name = "\0",
                     Parent = Items["AccentLiner"].Instance,
                     Offset = Vector2.new(0, 0),
-                    Transparency = NumberSequence.new({
-                        NumberSequenceKeypoint.new(0, 0),
-                        NumberSequenceKeypoint.new(0.5, 1),
-                        NumberSequenceKeypoint.new(1, 0),
+                    Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.25, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.75, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 0, 0))
                     })
                 })
 
@@ -2972,6 +2974,19 @@ do
                     BorderSizePixel = 0,
                     BackgroundColor3 = Library.Theme["Accent"]
                 }):AddToTheme({ BackgroundColor3 = 'Accent' })
+
+                Items["AccentGradient"] = Library:Create("UIGradient", {
+                    Name = "\0",
+                    Parent = Items["AccentLiner"].Instance,
+                    Offset = Vector2.new(0, 0),
+                    Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.25, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.75, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 0, 0))
+                    })
+                })
 
                 Items["Content"] = Library:Create("Frame", {
                     Name = "\0",
@@ -7366,9 +7381,88 @@ do
 
             local Items = {}
             do
+                Items["TitleBar"] = Library:Create("Frame", {
+                    Name = "\0",
+                    Parent = Library.Holder.Instance,
+                    AnchorPoint = Vector2.new(0.5, 0),
+                    Position = UDim2.new(0.5, 0, 0, -24),
+                    Size = UDim2.new(0, 552, 0, 24),
+                    BorderSizePixel = 0,
+                    BackgroundTransparency = 1
+                })
+
+Items["Logo"] = Library:Create("ImageLabel", {
+    Name = "\0",
+    Parent = Items["TitleBar"].Instance,
+    AnchorPoint = Vector2.new(0, 0.5),
+    Position = UDim2.new(0, 8, 0.5, 0),
+    Size = UDim2.new(0, 18, 0, 18),
+    BackgroundTransparency = 1,
+    Image = "rbxassetid://110825143066428",
+    ImageColor3 = Color3.fromRGB(120, 0, 0),
+    BorderSizePixel = 0
+})
+
+Library:Thread(function()
+    while Library and Items["Logo"] and Items["Logo"].Instance and Items["Logo"].Instance.Parent do
+        Items["Logo"]:Tween({ Rotation = (Items["Logo"].Instance.Rotation or 0) + 5 })
+        task.wait(0.5)
+    end
+end)
+
+Library:Create("UIGradient", {
+    Name = "\0",
+    Parent = Items["Logo"].Instance,
+    Offset = Vector2.new(0, 0)
+})
+
+                Items["TitleText"] = Library:Create("TextLabel", {
+                    Name = "\0",
+                    FontFace = Library.Font,
+                    TextSize = Library.FontSize,
+                    Parent = Items["TitleBar"].Instance,
+                    TextColor3 = Library.Theme["Accent"],
+                    Text = "AXIOM.IIV",
+                    AnchorPoint = Vector2.new(0, 0.5),
+                    Position = UDim2.new(0, 36, 0.5, 0),
+                    Size = UDim2.new(0, 0, 0, 15),
+                    BackgroundTransparency = 1,
+                    BorderSizePixel = 0,
+                    AutomaticSize = Enum.AutomaticSize.X
+                }):AddToTheme({ TextColor3 = "Accent" })
+
+                Items["TitleBarWave"] = Library:Create("Frame", {
+                    Name = "\0",
+                    Parent = Items["TitleBar"].Instance,
+                    AnchorPoint = Vector2.new(0, 1),
+                    Position = UDim2.new(0, 0, 1, 0),
+                    Size = UDim2.new(1, 0, 0, 1),
+                    BorderSizePixel = 0,
+                    BackgroundColor3 = Library.Theme["Accent"]
+                }):AddToTheme({ BackgroundColor3 = "Accent" })
+
+                Library:Create("UIGradient", {
+                    Name = "\0",
+                    Parent = Items["TitleBarWave"].Instance,
+                    Offset = Vector2.new(0, 0),
+                    Transparency = NumberSequence.new({
+                        NumberSequenceKeypoint.new(0, 0),
+                        NumberSequenceKeypoint.new(0.25, 1),
+                        NumberSequenceKeypoint.new(0.5, 0),
+                        NumberSequenceKeypoint.new(0.75, 1),
+                        NumberSequenceKeypoint.new(1, 0)
+                    })
+                })
+
                 Items["MainFrame"] = Library:Create("Frame", {
                     Name = "\0",
                     Parent = Library.Holder.Instance,
+                    AnchorPoint = Vector2.new(0.5, 0.5),
+                    Position = UDim2.new(0.5, 0, 0.5, 0),
+                    Size = UDim2.new(0, 552, 0, 600),
+                    BorderSizePixel = 0,
+                    BackgroundColor3 = Library.Theme["Background"]
+                }):AddToTheme({ BackgroundColor3 = 'Background' })
                     AnchorPoint = Vector2.new(0.5, 0.5),
                     Position = UDim2.new(0.5, 0, 0.5, 0),
                     Size = UDim2.new(0, 552, 0, 451),
@@ -7485,6 +7579,19 @@ do
                     BorderSizePixel = 0,
                     BackgroundColor3 = Color3.fromRGB(19, 128, 225)
                 }):AddToTheme({ BackgroundColor3 = "Accent" })
+
+                Items["HeaderGradient"] = Library:Create("UIGradient", {
+                    Name = "\0",
+                    Parent = Items["HeaderAccent"].Instance,
+                    Offset = Vector2.new(0, 0),
+                    Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.25, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.75, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 0, 0))
+                    })
+                })
 
                 Items["HeaderThirdInline"] = Library:Create("Frame", {
                     Name = "\0",
@@ -7872,6 +7979,38 @@ do
 
                 return Button
             end
+
+            Library:Thread(function()
+                while Library and Items["MainFrame"] and Items["MainFrame"].Instance.Parent do
+                    local Time = (tick() * 0.25) % 1
+                    if Items["TitleBarWave"] and Items["TitleBarWave"].Instance and Items["TitleBarWave"].Instance:FindFirstChildOfClass("UIGradient") then
+                        Items["TitleBarWave"].Instance:FindFirstChildOfClass("UIGradient").Offset = Vector2.new(Time, 0)
+                    end
+                    task.wait(0.03)
+                end
+            end)
+
+            Library:Thread(function()
+                while Library and Items["HeaderAccent"] and Items["HeaderAccent"].Instance.Parent do
+                    local Time = (tick() * 0.2) % 1
+                    Items["HeaderAccent"].Instance:FindFirstChildOfClass("UIGradient").Offset = Vector2.new(Time, 0)
+                    task.wait(0.03)
+                end
+            end)
+
+            Library:Thread(function()
+                while Library and Library.MainWindowFrame and Library.MainWindowFrame.Parent do
+                    local Time = (tick() * 0.2) % 1
+                    local KeybindList = Library.KeyList and Library.KeyList.Items and Library.KeyList.Items["KeybindList"] and Library.KeyList.Items["KeybindList"].Instance
+                    if KeybindList and KeybindList.Parent then
+                        local Gradient = KeybindList:FindFirstChild("AccentLiner") and KeybindList.AccentLiner:FindFirstChildOfClass("UIGradient")
+                        if Gradient then
+                            Gradient.Offset = Vector2.new(Time, 0)
+                        end
+                    end
+                    task.wait(0.03)
+                end
+            end)
 
             Items["DockOutline"]:Connect("MouseButton1Down", function()
                 Window:SetOpen(not Window.IsOpen)
