@@ -7519,14 +7519,38 @@ do
                 })
 
                 -- 3D ASSET VIEWPORT ADDED HERE
-                Items["TitleViewport"] = Library:Create("ViewportFrame", {
+                Items["TitleText"] = Library:Create("TextLabel", {
+                    Name = "\0",
+                    FontFace = Library.Font,
+                    TextSize = Library.FontSize,
+                    Parent = Items["TitleBar"].Instance,
+                    TextColor3 = Library.Theme["Accent"],
+                    Text = "AXIOM.IIV",
+                    AnchorPoint = Vector2.new(0, 0.5),
+                    Position = UDim2.new(0, 36, 0.5, 0),
+                    Size = UDim2.new(0, 0, 0, 15),
+                    BackgroundTransparency = 1,
+                    BorderSizePixel = 0,
+                    AutomaticSize = Enum.AutomaticSize.X
+                }):AddToTheme({ TextColor3 = "Accent" })
+
+                -- LOAD 3D ASSET LOGIC
+                Library:Thread(function()
+                    local Success, Result = pcall(function() return game:GetObjects("rbxassetid://110825143066428") end)
+                    if Success and Result and #Result > 0 then
+                        local Asset = Result[1]
+                        local Model = Asset:IsA("Model") and Asset or Instance.new("Model")
+                        if not Asset:IsA("Model") then Asset.Parent = Model end
+                        
+                        -- Setup Model inside Viewport
+                 Items["TitleViewport"] = Library:Create("ViewportFrame", {
                     Name = "\0",
                     Parent = Items["TitleBar"].Instance,
                     AnchorPoint = Vector2.new(0, 0.5),
-                    Position = UDim2.new(0, 8, 0.5, 0),
-                    Size = UDim2.new(0, 24, 0, 24),
-                    BackgroundTransparency = 0.2,
-                    BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+                    Position = UDim2.new(0, 6, 0.5, 0),
+                    Size = UDim2.new(0, 22, 0, 22),
+                    BackgroundTransparency = 0.5,
+                    BackgroundColor3 = Color3.fromRGB(10, 10, 10),
                     BorderSizePixel = 0,
                     Ambient = Color3.fromRGB(255, 255, 255),
                     LightColor = Color3.fromRGB(255, 255, 255),
@@ -7538,18 +7562,6 @@ do
                     Parent = Items["TitleViewport"].Instance,
                     CornerRadius = UDim.new(0, 4)
                 })
-
-                -- LOAD 3D ASSET LOGIC
-                Library:Thread(function()
-                    local Success, Result = pcall(function() return game:GetObjects("rbxassetid://110825143066428") end)
-                    if Success and Result and #Result > 0 then
-                        local Asset = Result[1]
-                        local Model = Asset:IsA("Model") and Asset or Instance.new("Model")
-                        if not Asset:IsA("Model") then Asset.Parent = Model end
-                        
-                        -- Setup Model inside Viewport
-                        Model.Parent = Items["TitleViewport"].Instance
-                        local Center, Size = Model:GetBoundingBox()
                         
                         -- Setup Camera
                         local Cam = Instance.new("Camera")
