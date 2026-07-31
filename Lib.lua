@@ -7463,12 +7463,6 @@ Library:Create("UIGradient", {
                     BorderSizePixel = 0,
                     BackgroundColor3 = Library.Theme["Background"]
                 }):AddToTheme({ BackgroundColor3 = 'Background' })
-                    AnchorPoint = Vector2.new(0.5, 0.5),
-                    Position = UDim2.new(0.5, 0, 0.5, 0),
-                    Size = UDim2.new(0, 552, 0, 451),
-                    BorderSizePixel = 0,
-                    BackgroundColor3 = Library.Theme["Background"]
-                }):AddToTheme({ BackgroundColor3 = 'Background' })
 
                 Items["MainFrame"]:MakeDraggable()
                 Items["MainFrame"]:MakeResizeable(Vector2.new(Items["MainFrame"].Instance.AbsoluteSize.X,
