@@ -3246,6 +3246,19 @@ do
                     BackgroundColor3 = Library.Theme["Accent"]
                 }):AddToTheme({ BackgroundColor3 = 'Accent' })
 
+                Library:Create("UIGradient", {
+                    Name = "\0",
+                    Parent = Items["AccentLiner"].Instance,
+                    Offset = Vector2.new(0, 0),
+                    Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.25, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.75, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 0, 0))
+                    })
+                })
+
                 Items["DarkLiner"] = Library:Create("Frame", {
                     Name = "\0",
                     Parent = Items["ESPPreview"].Instance,
@@ -3550,6 +3563,19 @@ do
                     BackgroundColor3 = Library.Theme["Accent"]
                 }):AddToTheme({ BackgroundColor3 = 'Accent' })
 
+                Library:Create("UIGradient", {
+                    Name = "\0",
+                    Parent = Items["AccentLiner"].Instance,
+                    Offset = Vector2.new(0, 0),
+                    Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.25, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.75, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 0, 0))
+                    })
+                })
+
                 Items["DarkLiner"] = Library:Create("Frame", {
                     Name = "\0",
                     Parent = Items["ModeratorList"].Instance,
@@ -3825,6 +3851,19 @@ do
                     BorderSizePixel = 0,
                     BackgroundColor3 = Library.Theme["Accent"]
                 }):AddToTheme({ BackgroundColor3 = 'Accent' })
+
+                Library:Create("UIGradient", {
+                    Name = "\0",
+                    Parent = Items["AccentLiner"].Instance,
+                    Offset = Vector2.new(0, 0),
+                    Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.25, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.75, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 0, 0))
+                    })
+                })
 
                 Items["DarkLiner"] = Library:Create("Frame", {
                     Name = "\0",
@@ -4117,6 +4156,19 @@ do
                     BorderSizePixel = 0,
                     BackgroundColor3 = Library.Theme["Accent"]
                 }):AddToTheme({ BackgroundColor3 = "Accent" })
+
+                Library:Create("UIGradient", {
+                    Name = "\0",
+                    Parent = Items["AccentLiner"].Instance,
+                    Offset = Vector2.new(0, 0),
+                    Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.25, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.75, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 0, 0))
+                    })
+                })
 
                 Items["DarkLiner"] = Library:Create("Frame", {
                     Name = "\0",
@@ -4864,15 +4916,18 @@ do
                     BackgroundColor3 = Library.Theme["Accent"]
                 }):AddToTheme({ BackgroundColor3 = "Accent" })
 
-                Library:Create("Frame", {
+                Library:Create("UIGradient", {
                     Name = "\0",
-                    Parent = Items["StatListWidget"].Instance,
-                    Position = UDim2.new(0, 0, 0, 1),
-                    Size = UDim2.new(1, 0, 0, 1),
-                    BorderSizePixel = 0,
-                    BackgroundColor3 = Library.Theme["Light Border"]
-                }):AddToTheme({ BackgroundColor3 = "Light Border" })
-
+                    Parent = Items["StatListWidget"].Instance:FindFirstChild("AccentLiner") or Items["StatListWidget"].Instance,
+                    Offset = Vector2.new(0, 0),
+                    Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.25, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.75, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 0, 0))
+                    })
+                })
                 Items["Title"] = Library:Create("TextLabel", {
                     Name = "\0",
                     FontFace = Library.Font,
@@ -6920,6 +6975,19 @@ do
                     BackgroundColor3 = Library.Theme["Accent"]
                 }):AddToTheme({ BackgroundColor3 = 'Accent' })
 
+                Library:Create("UIGradient", {
+                    Name = "\0",
+                    Parent = Items["AccentLiner"].Instance,
+                    Offset = Vector2.new(0, 0),
+                    Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.25, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 0, 0)),
+                        ColorSequenceKeypoint.new(0.75, Color3.fromRGB(20, 20, 20)),
+                        ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 0, 0))
+                    })
+                })
+
                 Items["DarkLiner"] = Library:Create("Frame", {
                     Name = "\0",
                     Parent = Items["Playerlist"].Instance,
@@ -7995,13 +8063,24 @@ Library:Create("UIGradient", {
             Library:Thread(function()
                 while Library and Library.MainWindowFrame and Library.MainWindowFrame.Parent do
                     local Time = (tick() * 0.2) % 1
-                    local KeybindList = Library.KeyList and Library.KeyList.Items and Library.KeyList.Items["KeybindList"] and Library.KeyList.Items["KeybindList"].Instance
-                    if KeybindList and KeybindList.Parent then
-                        local Gradient = KeybindList:FindFirstChild("AccentLiner") and KeybindList.AccentLiner:FindFirstChildOfClass("UIGradient")
-                        if Gradient then
-                            Gradient.Offset = Vector2.new(Time, 0)
+
+                    local function AnimateWidget(WidgetName)
+                        local Widget = Library[WidgetName]
+                        if Widget and Widget.Items and Widget.Items["AccentLiner"] and Widget.Items["AccentLiner"].Instance and Widget.Items["AccentLiner"].Instance.Parent then
+                            local Gradient = Widget.Items["AccentLiner"].Instance:FindFirstChildOfClass("UIGradient")
+                            if Gradient then Gradient.Offset = Vector2.new(Time, 0) end
                         end
                     end
+
+                    AnimateWidget("KeybindList")
+                    AnimateWidget("ESPPreview")
+                    AnimateWidget("ModeratorList")
+                    AnimateWidget("RadarWidget")
+                    AnimateWidget("CallLogger")
+                    AnimateWidget("Playerlist")
+                    AnimateWidget("StatListWidget")
+                    AnimateWidget("InventoryViewer")
+
                     task.wait(0.03)
                 end
             end)
