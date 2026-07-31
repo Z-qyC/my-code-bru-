@@ -7637,16 +7637,6 @@ do
                     })
                 })
 
-                Items["MainFrame"] = Library:Create("Frame", {
-                    Name = "\0",
-                    Parent = Library.Holder.Instance,
-                    AnchorPoint = Vector2.new(0.5, 0.5),
-                    Position = UDim2.new(0.5, 0, 0.5, 0),
-                    Size = UDim2.new(0, 552, 0, 600),
-                    BorderSizePixel = 0,
-                    BackgroundColor3 = Library.Theme["Background"]
-                }):AddToTheme({ BackgroundColor3 = 'Background' })
-
 Items["Logo"] = Library:Create("ImageLabel", {
     Name = "\0",
     Parent = Items["TitleBar"].Instance,
