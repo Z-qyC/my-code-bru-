@@ -5330,14 +5330,13 @@ Items.ESPHolder = Library:Create( "TextButton" , {
     Parent = Library.Items;
     Position = dim2(1, 10, 0, 30);
     AnchorPoint = vec2(1, 0);
-    Size = dim2(0, 300, 0, 400);
-                    Name = "\0";
-                    Size = dim2(1, 0, 0, 0);
-                    BorderColor3 = rgb(0, 0, 0);
-                    BorderSizePixel = 0;
-                    AutomaticSize = Enum.AutomaticSize.Y;
-                    BackgroundColor3 = themes.preset.outline
-                });	Library:Themify(Items.ESPHolder, "outline", "BackgroundColor3")
+    Size = dim2(0, 280, 0, 350);
+    Name = "\0";
+    BorderColor3 = rgb(0, 0, 0);
+    BorderSizePixel = 0;
+    AutomaticSize = Enum.AutomaticSize.Y;
+    BackgroundColor3 = themes.preset.outline
+}); Library:Themify(Items.ESPHolder, "outline", "BackgroundColor3")
 
                 Library:Create( "UIPadding" , {
                     PaddingTop = dim(0, 1);
@@ -5470,7 +5469,7 @@ Items.Holder = Library:Create( "Frame" , {
     BorderColor3 = rgb(0, 0, 0);
     BorderSizePixel = 0;
     BackgroundTransparency = 1;
-    AutomaticSize = Enum.AutomaticSize.None;
+    AutomaticSize = Enum.AutomaticSize.Y;
     BackgroundColor3 = rgb(255, 255, 255)
 });
 
@@ -5505,15 +5504,16 @@ Items.Holder = Library:Create( "Frame" , {
                         Parent = Items.Background
                     });
 
- Items.ViewportFrame = Library:Create( "ViewportFrame" , {
+Items.ViewportFrame = Library:Create( "ViewportFrame" , {
     Parent = Items.Background;
     ZIndex = 999;
-                        BorderColor3 = rgb(0, 0, 0);
-                        Size = dim2(0, 200, 0, 200);
-                        BorderSizePixel = 0;
-                        ClipsDescendants = true;
-                        BackgroundColor3 = themes.preset.misc_1
-                    });	Library:Themify(Items.ViewportFrame, "misc_1", "BackgroundColor3")
+    BorderColor3 = rgb(0, 0, 0);
+    Size = dim2(1, -10, 1, -45);
+    Position = dim2(0, 5, 0, 5);
+    BorderSizePixel = 0;
+    ClipsDescendants = true;
+    BackgroundColor3 = themes.preset.misc_1
+});	Library:Themify(Items.ViewportFrame, "misc_1", "BackgroundColor3")
 
                     -- Library:Create( "Frame" , {
                     --     Parent = Items.ViewportFrame;
@@ -5605,14 +5605,15 @@ Items.Holder.AnchorPoint = vec2(1, 0)
                 -- 
 
                 -- Box
-                    Items.Box = Library:Create( "Frame" , {
-                        BackgroundTransparency = 1;
-                        Parent = Items.ViewportFrame;
-                        BorderColor3 = rgb(0, 0, 0);
-                        Name = "\0";
-                        BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(255, 255, 255)
-                    });
+Items.Box = Library:Create( "Frame" , {
+    BackgroundTransparency = 1;
+    Parent = Items.ViewportFrame;
+    BorderColor3 = rgb(0, 0, 0);
+    Name = "\0";
+    BorderSizePixel = 0;
+    Size = dim2(1, 0, 1, 0);
+    BackgroundColor3 = rgb(255, 255, 255)
+});
 
                     Items.Left = Library:Create( "Frame" , {
                         Parent = Items.Box;
@@ -6137,7 +6138,7 @@ Items.Holder.AnchorPoint = vec2(1, 0)
                     local Enabled = Info.Enabled 
                     local Position = Info.Position 
 
-                    Elements.Text.Parent = Enabled and Library.Other or Items.ElementHolder
+                    Elements.Text.Parent = Enabled and Library.Items or Items.ElementHolder
                     Elements.Type.Parent = Enabled and Items[Position] or Library.Other
 
                     Options[Config.Prefix] = Enabled
@@ -6472,7 +6473,7 @@ Items.Holder.AnchorPoint = vec2(1, 0)
                     local Enabled = Info.Enabled 
                     local Position = Info.Position
 
-                    Elements.Text.Parent = Enabled and Library.Other or Items.ElementHolder
+                    Elements.Text.Parent = Enabled and Library.Items or Items.ElementHolder
                     Elements.Name.Parent = Enabled and Items[Position] or Library.Other
 
                     Options[Config.Prefix .. "_Text"] = Enabled
@@ -7130,7 +7131,7 @@ Items.Holder.AnchorPoint = vec2(1, 0)
                     local Enabled = Info.Enabled 
                     local Position = Info.Position 
 
-                    Elements.Text.Parent = Enabled and Library.Other or Items.ElementHolder
+                    Elements.Text.Parent = Enabled and Library.Items or Items.ElementHolder
                     Elements.BoxHolder.Parent = Enabled and Items[Position] or Library.Other
 
                     Items.ViewportFrame.AutomaticSize = Enum.AutomaticSize.Y 
