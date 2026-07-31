@@ -7,7 +7,7 @@
     local angle, empty_cfr, cfr = CFrame.Angles, CFrame.new(), CFrame.new
 -- 
 
--- Library 
+-- Library init
     getgenv().Library = {
         Directory = "octo",
         Folders = {
@@ -869,17 +869,16 @@
                 --
             end
             
- 	function Cfg.SetVisible(bool)
-		if Cfg.Tweening == true then
-			return
-		end
-		if Library.ESPPreviewHolder then
-			Library.ESPPreviewHolder.Visible = bool
-		end
-		Items.Colorpicker.Position = dim2(0, Items.ColorpickerObject.AbsolutePosition.X + 2, 0, Items.ColorpickerObject.AbsolutePosition.Y + 74)
-		Cfg.Tween(bool)
-		Cfg.Set(hsv(h, s, v), a)
-	end
+            function Cfg.SetVisible(bool)
+                if Cfg.Tweening == true then
+                    return 
+                end 
+
+                Items.Colorpicker.Position = dim2(0, Items.ColorpickerObject.AbsolutePosition.X + 2, 0, Items.ColorpickerObject.AbsolutePosition.Y + 74)
+                
+                Cfg.Tween(bool)
+                Cfg.Set(hsv(h, s, v), a)
+            end
 
             function Cfg.Tween(bool) 
                 if Cfg.Tweening == true then 
@@ -5319,95 +5318,96 @@
         local Options = setmetatable({}, {__index = MiscOptions, __newindex = function(self, key, value) MiscOptions[key] = value Esp.RefreshElements(key, value) end});
 
 function Library:EspPreview(properties)
-	local Cfg = {
-		Items = {};
-		CurrentTab;
-		Section = self;
-	}
-	local Items = Cfg.Items; do
-		Items.ESPHolder = Library:Create( "Frame" , {
-			Parent = Library.Elements;
-			Name = "ESPPreview";
-			Size = dim2(0, 260, 0, 350);
-			Position = dim2(1, -280, 0, 60);
-			BorderColor3 = rgb(0, 0, 0);
-			BorderSizePixel = 0;
-			BackgroundColor3 = themes.preset.outline
-		});	Library:Themify(Items.ESPHolder, "outline", "BackgroundColor3")
-		Library:Draggify(Items.ESPHolder)
-		Library.ESPPreviewHolder = Items.ESPHolder
+    local Cfg = {
+        Items = {};
+        CurrentTab;
+        Section = self;
+    } 
 
-		Items.Inline = Library:Create( "Frame" , {
-			Parent = Items.ESPHolder;
-			Name = "\0";
-			Position = dim2(0, 1, 0, 1);
-			BorderColor3 = rgb(0, 0, 0);
-			Size = dim2(1, -2, 1, -2);
-			BorderSizePixel = 0;
-			BackgroundColor3 = themes.preset.inline
-		});	Library:Themify(Items.Inline, "inline", "BackgroundColor3")
+    local Items = Cfg.Items; do 
+        -- Create ESP holder as a separate floating window
+        Items.ESPHolder = Library:Create( "TextButton" , {
+            Parent = Library.Items; -- Changed from self.Items.Elements
+            Name = "\0";
+            Size = dim2(0, 250, 0, 0); -- Fixed width, auto height
+            Position = dim2(1, -270, 0, 10); -- Top right corner
+            AnchorPoint = vec2(1, 0); -- Anchor to top right
+            BorderColor3 = rgb(0, 0, 0);
+            BorderSizePixel = 0;
+            AutomaticSize = Enum.AutomaticSize.Y;
+            BackgroundColor3 = themes.preset.outline;
+            ZIndex = 10; -- Ensure it's on top
+        }); Library:Themify(Items.ESPHolder, "outline", "BackgroundColor3")
 
-		Items.Background = Library:Create( "Frame" , {
-			Parent = Items.Inline;
-			Name = "\0";
-			Position = dim2(0, 1, 0, 1);
-			BorderColor3 = rgb(0, 0, 0);
-			Size = dim2(1, -2, 1, -2);
-			BorderSizePixel = 0;
-			BackgroundColor3 = themes.preset.background
-		});	Library:Themify(Items.Background, "background", "BackgroundColor3")
+        -- Make it draggable
+        Library:Draggify(Items.ESPHolder)
 
-		Items.Title = Library:Create( "TextLabel" , {
-			FontFace = Fonts[themes.preset.font];
-			Parent = Items.Background;
-			TextColor3 = themes.preset.text_color;
-			Text = "ESP Preview";
-			Name = "\0";
-			AutomaticSize = Enum.AutomaticSize.XY;
-			Position = dim2(0, 5, 0, 5);
-			BorderSizePixel = 0;
-			BackgroundTransparency = 1;
-			TextXAlignment = Enum.TextXAlignment.Left;
-			ZIndex = 2;
-			TextSize = 12;
-		});	Library:Themify(Items.Title, "text_color", "TextColor3")
-		Library:Create( "UIStroke" , { Parent = Items.Title; LineJoinMode = Enum.LineJoinMode.Miter })
+        Library:Create( "UIPadding" , {
+            PaddingTop = dim(0, 1);
+            PaddingBottom = dim(0, 1);
+            Parent = Items.ESPHolder;
+            PaddingRight = dim(0, 1);
+            PaddingLeft = dim(0, 1)
+        });
 
-		Items.Outline = Library:Create( "Frame" , {
-			Name = "\0";
-			Parent = Items.Background;
-			BorderColor3 = rgb(0, 0, 0);
-			Size = dim2(1, -10, 0, 20);
-			Position = dim2(0, 5, 0, 25);
-			BorderSizePixel = 0;
-			BackgroundColor3 = themes.preset.inline
-		});	Library:Themify(Items.Outline, "inline", "BackgroundColor3")
+        Library:Create( "UIListLayout" , {
+            Parent = Items.ESPHolder;
+            Padding = dim(0, -1);
+            SortOrder = Enum.SortOrder.LayoutOrder;
+            HorizontalFlex = Enum.UIFlexAlignment.Fill
+        });
 
-		Items.TabHolder = Library:Create( "Frame" , {
-			Parent = Items.Outline;
-			Name = "\0";
-			Position = dim2(0, 1, 0, 1);
-			BorderColor3 = rgb(0, 0, 0);
-			Size = dim2(1, -2, 1, -2);
-			BorderSizePixel = 0;
-			BackgroundColor3 = themes.preset.misc_1
-		});	Library:Themify(Items.TabHolder, "misc_1", "BackgroundColor3")
+        Items.Outline = Library:Create( "Frame" , {
+            LayoutOrder = -1;
+            Name = "\0";
+            Parent = Items.ESPHolder;
+            BorderColor3 = rgb(0, 0, 0);
+            Size = dim2(1, 0, 0, 18);
+            BorderSizePixel = 0;
+            BackgroundColor3 = themes.preset.inline
+        });	Library:Themify(Items.Outline, "inline", "BackgroundColor3")
 
-		Library:Create( "UIListLayout" , {
-			Parent = Items.TabHolder;
-			Padding = dim(0, -1);
-			SortOrder = Enum.SortOrder.LayoutOrder;
-			FillDirection = Enum.FillDirection.Horizontal
-		});
-		Library:Create( "UIPadding" , {
-			PaddingTop = dim(0, -1);
-			PaddingBottom = dim(0, -1);
-			Parent = Items.TabHolder;
-			PaddingRight = dim(0, -1);
-			PaddingLeft = dim(0, -1)
-		});
-	end
-	return setmetatable(Cfg, Library)
+        Items.TabHolder = Library:Create( "Frame" , {
+            Parent = Items.Outline;
+            Name = "\0";
+            Position = dim2(0, 1, 0, 1);
+            BorderColor3 = rgb(0, 0, 0);
+            Size = dim2(1, -2, 1, -2);
+            BorderSizePixel = 0;
+            BackgroundColor3 = themes.preset.misc_1
+        });	Library:Themify(Items.TabHolder, "misc_1", "BackgroundColor3")
+
+        Library:Create( "UIListLayout" , {
+            Parent = Items.TabHolder;
+            Padding = dim(0, -1);
+            SortOrder = Enum.SortOrder.LayoutOrder;
+            FillDirection = Enum.FillDirection.Horizontal
+        });
+
+        Library:Create( "UIPadding" , {
+            PaddingTop = dim(0, -1);
+            PaddingBottom = dim(0, -1);
+            Parent = Items.TabHolder;
+            PaddingRight = dim(0, -1);
+            PaddingLeft = dim(0, -1)
+        });
+    end    
+
+    -- Add visibility toggle that follows the main GUI
+    function Cfg.SetVisible(bool)
+        Items.ESPHolder.Visible = bool
+    end
+
+    -- Make it open/close with the main GUI
+    local Window = self
+    local OriginalSetVisible = Window.SetVisible
+    
+    Window.SetVisible = function(bool)
+        OriginalSetVisible(bool)
+        Cfg.SetVisible(bool)
+    end
+
+    return setmetatable(Cfg, Library)
 end
 
         function Library:AddTab(properties)
@@ -5477,17 +5477,17 @@ end
                 --
 
                 -- Middle page
-		Items.Holder = Library:Create( "Frame" , {
-			Parent = self.Section.Items.Background;
-			Name = "\0";
-			Visible = false;
-			Size = dim2(1, -10, 1, -55);
-			Position = dim2(0, 5, 0, 50);
-			BorderColor3 = rgb(0, 0, 0);
-			BorderSizePixel = 0;
-			BackgroundTransparency = 1;
-			BackgroundColor3 = rgb(255, 255, 255)
-		});
+                    Items.Holder = Library:Create( "Frame" , {
+                        Parent = Library.Other;
+                        Name = "\0";
+                        Visible = false;
+                        Size = dim2(0, 100, 0, 100);
+                        BorderColor3 = rgb(0, 0, 0);
+                        BorderSizePixel = 0;
+                        BackgroundTransparency = 1;
+                        AutomaticSize = Enum.AutomaticSize.Y;
+                        BackgroundColor3 = rgb(255, 255, 255)
+                    });
 
                     Items.CharacterHolder = Library:Create( "Frame" , {
                         Parent = Items.Holder;
@@ -5520,14 +5520,15 @@ end
                         Parent = Items.Background
                     });
 
-		Items.ViewportFrame = Library:Create( "ViewportFrame" , {
-			Parent = Items.Background;
-			BorderColor3 = rgb(0, 0, 0);
-			Size = dim2(1, 0, 1, 0);
-			BorderSizePixel = 0;
-			ClipsDescendants = true;
-			BackgroundColor3 = themes.preset.misc_1
-		});	Library:Themify(Items.ViewportFrame, "misc_1", "BackgroundColor3")
+                    Items.ViewportFrame = Library:Create( "ViewportFrame" , {
+                        Parent = Items.Background;
+                        BorderColor3 = rgb(0, 0, 0);
+                        Size = dim2(0, 200, 0, 200);
+                        BorderSizePixel = 0;
+                        ClipsDescendants = true;
+                        BackgroundColor3 = themes.preset.misc_1
+                    });	Library:Themify(Items.ViewportFrame, "misc_1", "BackgroundColor3")
+
                     -- Library:Create( "Frame" , {
                     --     Parent = Items.ViewportFrame;
                     --     BorderColor3 = rgb(0, 0, 0);
@@ -7293,18 +7294,26 @@ end
                 return setmetatable(Config, Library)
             end
 
- 	function Cfg.FlipPage()
-		local OldItems = self.CurrentTab
-		if OldItems then
-			OldItems.Holder.Visible = false
-			OldItems.Holder.Parent = Library.Other
-			Library:Tween(OldItems.Title, {TextColor3 = themes.preset.unselected})
-		end
-		Items.Holder.Visible = true
-		Items.Holder.Parent = self.Section.Items.Background
-		Library:Tween(Items.Title, {TextColor3 = themes.preset.text_color})
-		self.CurrentTab = Cfg.Items
-	end
+ function Cfg.FlipPage()
+    local OldItems = self.CurrentTab 
+
+    if OldItems then 
+        OldItems.Holder.Visible = false
+        OldItems.Holder.Parent = Library.Other
+        Library:Tween(OldItems.Title, {TextColor3 = themes.preset.unselected})
+    end 
+
+    Items.Holder.Visible = true 
+    Items.Holder.Parent = self.Items.ESPHolder
+    Library:Tween(Items.Title, {TextColor3 = themes.preset.text_color})
+
+    -- Adjust ESP holder size based on content
+    task.wait(0.1)
+    local contentHeight = Items.Holder.AbsoluteSize.Y + 25
+    Items.ESPHolder.Size = dim2(0, 250, 0, math.max(contentHeight, 50))
+
+    self.CurrentTab = Cfg.Items
+end
 
             -- Viewport frame
             if type(Cfg.Model) == "string" then 
