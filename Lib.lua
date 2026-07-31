@@ -1,7 +1,3 @@
--- made by samet 
--- retarded niggers
--- https://discord.gg/VhvTd5HV8d
-
 if getgenv().Library then 
     getgenv().Library:Unload()
 end
@@ -1695,9 +1691,9 @@ local Library do
                 BackgroundColor3 = FromRGB(255, 255, 255)
             }) 
 
-            -- MODIFIED LOGO CREATION - Support for Model Assets
+-- FIXED LOGO CREATION - Support for Model Assets
             local LogoId = tostring(Window.Logo)
-            local IsModel = string.find(LogoId, "model") or (string.match(LogoId, "^%d+$") and #LogoId >= 12)
+            local IsModel = string.find(LogoId, "model") or (tonumber(LogoId) and #LogoId >= 12)
             
             Items["Logo"] = Instances:Create("Frame", {
                 Parent = Items["Sidebar"].Instance,
