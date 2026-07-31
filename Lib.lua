@@ -1708,40 +1708,40 @@ local Library do
                 ClipsDescendants = true
             })
 
-            if IsModel then
-                -- Load as model asset
-                local success, model = pcall(function()
-                    local models = game:GetObjects("rbxassetid://" .. LogoId)
-                    if models and #models > 0 then
-                        local m = models[1]
-                        m.Parent = Items["Logo"].Instance
-                        m.AnchorPoint = Vector2.new(0.5, 0.5)
-                        m.Position = UDim2.new(0.5, 0, 0.5, 0)
-                        m.Size = UDim2.new(1, 0, 1, 0)
-                        return m
-                    end
-                end)
-                
-                if not success then
-                    -- Fallback to image if model fails
-                    local image = Instance.new("ImageLabel")
-                    image.Parent = Items["Logo"].Instance
-                    image.Size = UDim2.new(1, 0, 1, 0)
-                    image.BackgroundTransparency = 1
-                    image.ScaleType = Enum.ScaleType.Fit
-                    image.Image = "rbxassetid://" .. LogoId
-                    Items["Logo"]:AddToTheme({ImageColor3 = "Image"})
-                end
-            else
-                -- Use as image
-                local image = Instance.new("ImageLabel")
-                image.Parent = Items["Logo"].Instance
-                image.Size = UDim2.new(1, 0, 1, 0)
-                image.BackgroundTransparency = 1
-                image.ScaleType = Enum.ScaleType.Fit
-                image.Image = "rbxassetid://" .. LogoId
-                Items["Logo"]:AddToTheme({ImageColor3 = "Image"})
-            end
+if IsModel then
+    -- Load as model asset
+    local success, model = pcall(function()
+        local models = game:GetObjects("rbxassetid://" .. LogoId)
+        if models and #models > 0 then
+            local m = models[1]
+            m.Parent = Items["Logo"].Instance
+            m.AnchorPoint = Vector2.new(0.5, 0.5)
+            m.Position = UDim2.new(0.5, 0, 0.5, 0)
+            m.Size = UDim2.new(1, 0, 1, 0)
+            return m
+        end
+    end)
+    
+    if not success then
+        -- Fallback to image if model fails
+        local image = Instance.new("ImageLabel")
+        image.Parent = Items["Logo"].Instance
+        image.Size = UDim2.new(1, 0, 1, 0)
+        image.BackgroundTransparency = 1
+        image.ScaleType = Enum.ScaleType.Fit
+        image.Image = "rbxassetid://" .. LogoId
+        image:AddToTheme({ImageColor3 = "Image"})
+    end
+else
+    -- Use as image
+    local image = Instance.new("ImageLabel")
+    image.Parent = Items["Logo"].Instance
+    image.Size = UDim2.new(1, 0, 1, 0)
+    image.BackgroundTransparency = 1
+    image.ScaleType = Enum.ScaleType.Fit
+    image.Image = "rbxassetid://" .. LogoId
+    image:AddToTheme({ImageColor3 = "Image"})
+end
 
             Items["Shadow2"] = Instances:Create("ImageLabel", {
                 Parent = Items["Logo"].Instance,
