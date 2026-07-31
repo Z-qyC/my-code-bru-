@@ -897,8 +897,10 @@
             return math.floor(num * Multiplier + 0.5) / Multiplier
         end
         function Library:Themify(instance, theme, property)
-            tinsert(themes.utility[theme][property], instance)
-        end
+    if themes.utility[theme] and themes.utility[theme][property] then
+        tinsert(themes.utility[theme][property], instance)
+    end
+end
         function Library:SaveGradient(instance, theme)
             tinsert(themes.gradients[theme], instance)
         end
@@ -1412,7 +1414,40 @@
                 Enabled = true;
                 Size = 0
             });
-            Library.KeybindList = Library:StatusList({Name = "Keybinds"})
+Library.KeybindList = Library:StatusList({Name = "Keybinds"})
+Library.ESPHolder = Library:Create("Frame", {
+    Parent = Library.Elements;
+    Name = "\0";
+    Position = dim2(1, -260, 0, 20);
+    Size = dim2(0, 240, 0, 0);
+    BorderColor3 = rgb(0, 0, 0);
+    BorderSizePixel = 0;
+    AutomaticSize = Enum.AutomaticSize.Y;
+    BackgroundColor3 = themes.preset.outline
+}); Library:Themify(Library.ESPHolder, "outline", "BackgroundColor3")
+Library:Create("UIPadding", {
+    PaddingTop = dim(0, 1);
+    PaddingBottom = dim(0, 1);
+    Parent = Library.ESPHolder;
+    PaddingRight = dim(0, 1);
+    PaddingLeft = dim(0, 1)
+})
+Library:Create("UIListLayout", {
+    Parent = Library.ESPHolder;
+    Padding = dim(0, -1);
+    SortOrder = Enum.SortOrder.LayoutOrder;
+    HorizontalFlex = Enum.UIFlexAlignment.Fill
+})
+local ESPAccent = Library:Create("Frame", {
+    Name = "\0";
+    Parent = Library.ESPHolder;
+    LayoutOrder = -2;
+    BorderColor3 = rgb(0, 0, 0);
+    Size = dim2(1, 0, 0, 1);
+    BorderSizePixel = 0;
+    BackgroundColor3 = themes.preset.accent
+}); Library:Themify(ESPAccent, "accent", "BackgroundColor3")
+local Items = Cfg.Items; do
             local Items = Cfg.Items; do
                     Items.Holder = Library:Create( "Frame" , {
                         Parent = Library.Items;
@@ -1473,15 +1508,6 @@
                         BorderSizePixel = 0;
                         BackgroundColor3 = themes.preset.inline
                     });	Library:Themify(Items.ThirdInline, "inline", "BackgroundColor3")
-                    Items.Accent = Library:Create("Frame", {
-    Name = "\\0";
-    Parent = Items.ESPHolder;
-    LayoutOrder = -2;
-    BorderColor3 = rgb(0, 0, 0);
-    Size = dim2(1, 0, 0, 1);
-    BorderSizePixel = 0;
-    BackgroundColor3 = themes.preset.accent
-}); Library:Themify(Items.Accent, "accent", "BackgroundColor3")
                     Items.Outline = Library:Create( "Frame" , {
                         Parent = Items.SecondInline;
                         Name = "\0";
@@ -4537,17 +4563,46 @@ Items.Fading = Library:Create( "Frame", {
                 Section = self;
             }
             local Items = Cfg.Items; do
-                Items.ESPHolder = Library:Create( "TextButton" , {
-                    Parent = Library.Elements;
-                    Name = "\0";
-                    Position = dim2(1, -260, 0, 20);
-                    Size = dim2(0, 240, 0, 0);
-                    BorderColor3 = rgb(0, 0, 0);
-                    BorderSizePixel = 0;
-                    AutomaticSize = Enum.AutomaticSize.Y;
-                    BackgroundColor3 = themes.preset.outline
-                });	Library:Themify(Items.ESPHolder, "outline", "BackgroundColor3");
-                Library.ESPHolder = Items.ESPHolder
+Items.ESPHolder = Library:Create( "Frame" , {
+Parent = Library.Elements;
+Name = "\0";
+Position = dim2(1, -260, 0, 20);
+Size = dim2(0, 240, 0, 0);
+BorderColor3 = rgb(0, 0, 0);
+BorderSizePixel = 0;
+AutomaticSize = Enum.AutomaticSize.Y;
+BackgroundColor3 = themes.preset.outline
+});	Library:Themify(Items.ESPHolder, "outline", "BackgroundColor3");
+Library.ESPHolder = Items.ESPHolder
+Items.ESPGlow = Library:Create("ImageLabel", {
+    ImageColor3 = themes.preset.accent;
+    ScaleType = Enum.ScaleType.Slice;
+    Parent = Items.ESPHolder;
+    ImageTransparency = 0.65;
+    BorderColor3 = rgb(0, 0, 0);
+    Name = "\0";
+    Size = dim2(1, 41, 1, 41);
+    BorderSizePixel = 0;
+    AnchorPoint = vec2(0.5, 0.5);
+    Image = "rbxassetid://18245826428";
+    BackgroundTransparency = 1;
+    Position = dim2(0.5, -1, 0.5, -1);
+    BackgroundColor3 = rgb(255, 255, 255);
+    SliceCenter = rect(vec2(21, 21), vec2(79, 79))
+}); Library:Themify(Items.ESPGlow, "accent", "ImageColor3")
+Library:Create("UIPadding", {
+    PaddingTop = dim(0, 20);
+    PaddingBottom = dim(0, 20);
+    Parent = Items.ESPGlow;
+    PaddingRight = dim(0, 20);
+    PaddingLeft = dim(0, 20)
+})
+Items.ESPHolder.MouseEnter:Connect(function()
+    Library:Tween(Items.ESPGlow, {ImageTransparency = 0.65})
+end)
+Items.ESPHolder.MouseLeave:Connect(function()
+    Library:Tween(Items.ESPGlow, {ImageTransparency = 1})
+end)
                 Library:Create( "UIPadding" , {
                     PaddingTop = dim(0, 1);
                     PaddingBottom = dim(0, 1);
@@ -4664,15 +4719,59 @@ Items.Fading = Library:Create( "Frame", {
                         AutomaticSize = Enum.AutomaticSize.Y;
                         BackgroundColor3 = rgb(255, 255, 255)
                     });
-                    Items.CharacterHolder = Library:Create( "Frame" , {
-                        Parent = Items.Holder;
-                        Name = "\0";
-                        Size = dim2(1, 0, 0, 18);
-                        BorderColor3 = rgb(0, 0, 0);
-                        BorderSizePixel = 0;
-                        AutomaticSize = Enum.AutomaticSize.Y;
-                        BackgroundColor3 = themes.preset.inline
-                    });	Library:Themify(Items.CharacterHolder, "inline", "BackgroundColor3")
+Items.CharacterHolder = Library:Create( "Frame" , {
+Parent = Items.Holder;
+Name = "\0";
+Size = dim2(1, 0, 0, 18);
+BorderColor3 = rgb(0, 0, 0);
+BorderSizePixel = 0;
+AutomaticSize = Enum.AutomaticSize.Y;
+BackgroundColor3 = themes.preset.inline
+});	Library:Themify(Items.CharacterHolder, "inline", "BackgroundColor3")
+Library:Create("UIPadding", {
+    PaddingBottom = dim(0, 2);
+    Parent = Items.CharacterHolder
+})
+Items.CharacterBackground = Library:Create("Frame", {
+    Parent = Items.CharacterHolder;
+    Size = dim2(1, -2, 1, -2);
+    Name = "\0";
+    Position = dim2(0, 1, 0, 1);
+    BorderColor3 = rgb(0, 0, 0);
+    BorderSizePixel = 0;
+    AutomaticSize = Enum.AutomaticSize.Y;
+    BackgroundColor3 = themes.preset.misc_1
+}); Library:Themify(Items.CharacterBackground, "misc_1", "BackgroundColor3")
+Library:Create("UIPadding", {
+    Parent = Items.CharacterBackground
+})
+Items.ViewportOutline = Library:Create("Frame", {
+    Parent = Items.CharacterBackground;
+    Name = "\0";
+    Size = dim2(0, 204, 0, 204);
+    Position = dim2(0.5, -102, 0, 10);
+    BorderColor3 = themes.preset.accent;
+    BorderSizePixel = 1;
+    BackgroundTransparency = 1;
+    BackgroundColor3 = themes.preset.outline
+}); Library:Themify(Items.ViewportOutline, "accent", "BorderColor3")
+Items.ViewportFrame = Library:Create("ViewportFrame", {
+    Parent = Items.ViewportOutline;
+    BorderColor3 = rgb(0, 0, 0);
+    Size = dim2(1, -4, 1, -4);
+    Position = dim2(0, 2, 0, 2);
+    BorderSizePixel = 0;
+    ClipsDescendants = true;
+    BackgroundColor3 = themes.preset.misc_1
+}); Library:Themify(Items.ViewportFrame, "misc_1", "BackgroundColor3")
+Items.Camera = Library:Create("Camera", {
+    CameraType = Enum.CameraType.Track;
+    Focus = CFrame.new(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    Parent = Workspace;
+    CFrame = CFrame.new(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    Name = "\0"
+})
+Items.ViewportFrame.CurrentCamera = Items.Camera
                     Library:Create( "UIPadding" , {
                         PaddingBottom = dim(0, 2);
                         Parent = Items.CharacterHolder
@@ -7269,4 +7368,9 @@ end
         end
     end
     Esp.Loop = RunService:BindToRenderStep("Run Loop", 400, Esp.Update)
+-- Initialize configs if needed
+if Library.ConfigsInit then
+    Library:Configs(Library.MainPanel, Library.ConfigTab)
+end
+
 return Library, Esp, MiscOptions, Options
