@@ -1473,6 +1473,15 @@
                         BorderSizePixel = 0;
                         BackgroundColor3 = themes.preset.inline
                     });	Library:Themify(Items.ThirdInline, "inline", "BackgroundColor3")
+                    Items.Accent = Library:Create("Frame", {
+    Name = "\\0";
+    Parent = Items.ESPHolder;
+    LayoutOrder = -2;
+    BorderColor3 = rgb(0, 0, 0);
+    Size = dim2(1, 0, 0, 1);
+    BorderSizePixel = 0;
+    BackgroundColor3 = themes.preset.accent
+}); Library:Themify(Items.Accent, "accent", "BackgroundColor3")
                     Items.Outline = Library:Create( "Frame" , {
                         Parent = Items.SecondInline;
                         Name = "\0";
@@ -1798,8 +1807,8 @@
                         Size = Cfg.Size;
                         BackgroundColor3 = themes.preset.outline
                     });	Library:Themify(Items.Window, "outline", "BackgroundColor3")
-                    Items.Fading = Library:Create( "Frame", {
-                        Parent = Items.Panel;
+Items.Fading = Library:Create( "Frame", {
+    Parent = Items.Window;
                         BackgroundTransparency = 1;
                         Name = "\0";
                         BorderColor3 = rgb(0, 0, 0);
@@ -4895,6 +4904,7 @@
                     CFrame = CFrame.new(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1);
                     Name = "\0"
                 });
+                Items.ViewportFrame.CurrentCamera = Items.Camera
             end
             local Math = {}; do
                 local Methods = Instance.new('Part')
@@ -5088,6 +5098,35 @@
                             Padding = dim(0, 7);
                             SortOrder = Enum.SortOrder.LayoutOrder
                         });
+                        Items.Glow = Library:Create("ImageLabel", {
+    ImageColor3 = themes.preset.accent;
+    ScaleType = Enum.ScaleType.Slice;
+    Parent = Items.ESPHolder;
+    ImageTransparency = 1;
+    BorderColor3 = rgb(0, 0, 0);
+    Name = "\\0";
+    Size = dim2(1, 41, 1, 41);
+    BorderSizePixel = 0;
+    AnchorPoint = vec2(0.5, 0.5);
+    Image = "rbxassetid://18245826428";
+    BackgroundTransparency = 1;
+    Position = dim2(0.5, -1, 0.5, -1);
+    BackgroundColor3 = rgb(255, 255, 255);
+    SliceCenter = rect(vec2(21, 21), vec2(79, 79))
+}); Library:Themify(Items.Glow, "accent", "ImageColor3")
+Library:Create("UIPadding", {
+    PaddingTop = dim(0, 20);
+    PaddingBottom = dim(0, 20);
+    Parent = Items.Glow;
+    PaddingRight = dim(0, 20);
+    PaddingLeft = dim(0, 20)
+});
+Items.ESPHolder.MouseEnter:Connect(function()
+    Library:Tween(Items.Glow, {ImageTransparency = 0.65})
+end)
+Items.ESPHolder.MouseLeave:Connect(function()
+    Library:Tween(Items.Glow, {ImageTransparency = 1})
+end)
                         Elements.Options = {}
                         local Section = setmetatable(Config, Library)
                         Elements.Options.Low = Section:Label({Name = "Low"}):Colorpicker({Callback = function(color)
@@ -6131,16 +6170,29 @@
                 Library:Tween(Items.Title, {TextColor3 = themes.preset.text_color})
                 self.CurrentTab = Cfg.Items
             end
-            if type(Cfg.Model) == "string" then
-                Cfg.VisualizedModel = game:GetObjects(Cfg.Model)[1]
-                Cfg.VisualizedModel.Parent = Items.ViewportFrame
-            elseif type(Cfg.Model) == "userdata" and Cfg.Model:IsA("Model") then
-                Cfg.Model.Archivable = true
-                Cfg.VisualizedModel = Cfg.Model:Clone()
-                Cfg.VisualizedModel:ScaleTo(Cfg.Scale)
-                Cfg.VisualizedModel.Parent = Items.ViewportFrame
-            end
-            Cfg.VisualizedModel:SetPrimaryPartCFrame(CFrame.new(Vector3.new(0, Cfg.ModelOffset, -8)))
+if type(Cfg.Model) == "string" then
+    local success, result = pcall(game.GetObjects, game, Cfg.Model)
+    if success and result and result[1] then
+        Cfg.VisualizedModel = result[1]
+        Cfg.VisualizedModel.Parent = Items.ViewportFrame
+    end
+elseif type(Cfg.Model) == "userdata" and Cfg.Model:IsA("Model") then
+    Cfg.Model.Archivable = true
+    Cfg.VisualizedModel = Cfg.Model:Clone()
+    Cfg.VisualizedModel:ScaleTo(Cfg.Scale)
+    Cfg.VisualizedModel.Parent = Items.ViewportFrame
+end
+if Cfg.VisualizedModel then
+    if not Cfg.VisualizedModel.PrimaryPart then
+        local firstPart = Cfg.VisualizedModel:FindFirstChildWhichIsA("BasePart")
+        if firstPart then
+            Cfg.VisualizedModel.PrimaryPart = firstPart
+        end
+    end
+    if Cfg.VisualizedModel.PrimaryPart then
+        Cfg.VisualizedModel:SetPrimaryPartCFrame(CFrame.new(Vector3.new(0, Cfg.ModelOffset, -8)))
+    end
+end
                 local rotationAngle = 0
                 local function centerModel()
                     local model = Cfg.VisualizedModel
